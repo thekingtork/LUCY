@@ -78,8 +78,7 @@ Tareas.prototype.mostrarMenu = function() {
         	guardarBeneficiarios ();
         	break
         case "5":
-          var _uds = prompt("Ingresa el codigo de la UDS","");
-          vincularBeneficiarios(_uds);
+          vincularBeneficiarios();
           break
         default:
             break
@@ -151,39 +150,70 @@ function buscarBeneficiarios () {
       hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_Estado_Beneficiarios_"+hoy+".csv",resultado);
    };
 }
-function vincularBeneficiarios(uds){
-    var Url = new Ruta();
+
+function mostrarContratos (){
+	var Url = new Ruta();
+	var datosJson = HTTPGET('http://localhost/lucy/contratos.json');
+	var respuesta = JSON.parse(datosJson);
+	var texto = "";
+		for (var i = 0; i < respuesta.length; i++) {
+			 	texto += "["+i+"] "+respuesta[i].NCONTRATO+"  CZ "+respuesta[i].CENTROZONAL+"\n";
+			};
+	var contrato = prompt('Seleccione el contrato a procesar'+"\n"+"\n"+texto,"");
+	var codigo = "CODE:\n";
+		codigo += "URL GOTO="+Url.getDireccion(0)+"\n";
+		codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroContrato CONTENT="+respuesta[contrato].NCONTRATO+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdVigencia CONTENT=%7"+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdRegional CONTENT=%10"+"\n";
+		codigo += "TAG POS=1 TYPE=LABEL FORM=ID:form1 ATTR=TXT:Dirección<SP>de<SP>Primera<SP>Infancia"+"\n";
+		codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblDireccionesICBF_0 CONTENT=YES"+"\n";
+		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+		codigo += "WAIT SECONDS=1"+"\n";
+		codigo += "SET !TIMEOUT_STEP 15"+"\n";
+		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvContrato_btnInfo_0"+"\n";
+	iimPlay(codigo);
+}
+function recorridoVinculacion(servicio,departamento,municipio){
+	var codigo = "CODE:\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
+		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioContratado_btnInfo_"+servicio+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+departamento+"\n";
+		codigo += "WAIT SECONDS=1"+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+municipio+"\n";
+		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+	iimPlay(codigo);	
+}
+function vincularBeneficiarios(){
+	mostrarContratos ();
+	recorridoVinculacion(0,10,432);
+    /*var Url = new Ruta();
     var datosJson =  HTTPGET('http://localhost/lucy/paraCargar.json');
     var respuesta = JSON.parse(datosJson);
     for (var i = 0; i <= respuesta.length; i++) {
       if (respuesta[i].CODIGO_UDS == uds) {
         var codigo = "CODE:\n";
-        codigo += "SET !TIMEOUT_STEP 5"+"\n";
-        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
-        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-        codigo += "WAIT SECONDS=1"+"\n";
-        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaVinculacion_txtFecha CONTENT=27/03/2014"+"\n";
-        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoDocumento CONTENT=%"+respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroDocumento CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-        codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_btnFiltrar"+"\n";
-        codigo += "WAIT SECONDS=1"+"\n";
-            codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_chkAdd_0 CONTENT=YES"+"\n";
-            codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaAtencion_txtFecha CONTENT=04/02/2015"+"\n";
-            codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-        /*codigo += "TAG POS=30 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-        var estado = iimGetExtract();
-        alert(estado);
-        if (estado !="No se encontraron datos, verifique por favor.") {
-        };*/
+	        codigo += "SET !TIMEOUT_STEP 5"+"\n";
+	        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+	        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
+	        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+	        codigo += "WAIT SECONDS=1"+"\n";
+	        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+	        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaVinculacion_txtFecha CONTENT=27/03/2014"+"\n";
+	        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoDocumento CONTENT=%"+respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+	        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroDocumento CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+	        codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_btnFiltrar"+"\n";
+	        codigo += "WAIT SECONDS=1"+"\n";
+	        codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_chkAdd_0 CONTENT=YES"+"\n";
+	        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaAtencion_txtFecha CONTENT=04/02/2015"+"\n";
+	        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
         iimPlay(codigo);
       };
   };
   codigo= null;
    codigo = "CODE:\n";
    codigo += "URL GOTO="+Url.getDireccion(6)+"\n";
-   iimPlay(codigo);
+   iimPlay(codigo);*/
 }
 function guardarBeneficiarios (){
 	var aux = "";
