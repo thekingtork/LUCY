@@ -8,7 +8,6 @@
       .createInstance(Components.interfaces.nsILocalFile);
    file.initWithPath( filename );
    if ( file.exists() == false ) {
-      //alert( "Creando archivo... " );
       file.create( Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420 );
    }
    var outputStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
@@ -237,7 +236,7 @@ function vinc (_uds) {
        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+10+"\n";
        codigo += "WAIT SECONDS=1"+"\n";
        codigo += "SET !TIMEOUT_STEP 5"+"\n";
-       codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+430+"\n";
+       codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+456+"\n";
        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
        iimPlay(codigo);
 }
@@ -257,6 +256,9 @@ function capturarUDS(pag) {
             iimDisplay(codigoUDS[j]);
             ingresarItenUDS(j);
             vinc(codigoUDS[j]);
+             if (k!=1) {
+                paginador(k);
+              };
         };   
     };
   function capturar(){
@@ -561,7 +563,6 @@ function buscarContrato(){
     codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblDireccionesICBF_0 CONTENT=YES"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
   iimPlay(codigo);
-    //alert("Escoja el contrato que desvincularÃ¡");
     tiempo(10);
       codigo = "";
       codigo = "CODE:\n";
@@ -616,7 +617,7 @@ function Servicios () {
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
     iimPlay(codigo);
-    var nPag = 1 //prompt('Ingresa el numero de Paginas a procesar:','');
+    var nPag = 1;
     for (var k = 1; k <= nPag; k++) {
       for (var j = 0; j < 10; j++) {
         if (k!=1) {
