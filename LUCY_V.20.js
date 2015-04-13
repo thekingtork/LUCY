@@ -160,6 +160,7 @@ function mostrarContratos (){
 			 	texto += "["+i+"] "+respuesta[i].NCONTRATO+"  CZ "+respuesta[i].CENTROZONAL+"\n";
 			};
 	var contrato = prompt('Seleccione el contrato a procesar'+"\n"+"\n"+texto,"");
+  var nContrato = respuesta[contrato].NCONTRATO;
 	var codigo = "CODE:\n";
 		codigo += "URL GOTO="+Url.getDireccion(0)+"\n";
 		codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroContrato CONTENT="+respuesta[contrato].NCONTRATO+"\n";
@@ -172,15 +173,16 @@ function mostrarContratos (){
 		codigo += "SET !TIMEOUT_STEP 15"+"\n";
 		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvContrato_btnInfo_0"+"\n";
 	iimPlay(codigo);
+  return nContrato;
 }
-function recorridoVinculacion(servicio,departamento,municipio){
+function recorridoVinculacion(servicio){
 	var codigo = "CODE:\n";
 		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
 		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioContratado_btnInfo_"+servicio+"\n";
 		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+departamento+"\n";
+		//codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+departamento+"\n";
 		codigo += "WAIT SECONDS=1"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+municipio+"\n";
+		//codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+municipio+"\n";
 		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
 	iimPlay(codigo);	
 }
@@ -196,10 +198,9 @@ function vinc (_uds) {
   var Url = new Ruta();
   var datosJson =  HTTPGET('http://localhost/lucy/paraCargar.json');
   var respuesta = JSON.parse(datosJson);
-    //***************************** CICLO QUE RECORRE EL JSON PARA HACER LA BUSQUEDA **********************//
            for (var j in respuesta) {
-            iimDisplay("Busqueda "+j+" en UDS "+ _uds);
-               /* if (respuesta[j].CODIGO_UDS == codigoUDS[k+1]) {
+            //iimDisplay("Busqueda "+j+" en UDS "+ _uds);
+               if (respuesta[j].CODIGO_UDS == _uds) {
                   codigo = "CODE:\n";
                   codigo += "SET !TIMEOUT_STEP 5"+"\n";
                   codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
@@ -223,10 +224,8 @@ function vinc (_uds) {
                     retornar();
                 };
               }else{
-                //alert("posicion actual JSON"+j);
                 continue;
-              };*/
-    //***************************** FIN DEL CICLO BUSQUEDA **********************//
+              };
         };
        codigo= null;
        codigo = "CODE:\n";
@@ -239,30 +238,34 @@ function vinc (_uds) {
        iimPlay(codigo);
 }
 
-
-function capturarUDS() {
+function capturarUDS(pag) {
   var codigoUDS = new Array();
   var arreglo = new Array("2","7","12","17","22","27","32","37","42","47");
-  //**************************** CICLO PARA CAPTURAR LAS UDS ******************//
-  for (var i = 0; i < arreglo.length; i++) {
-    var codigo = "CODE:\n";
-    codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
-    if (i!=10) {
-      codigo += "TAG POS=R"+arreglo[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+  var nPag = pag;
+  for (var k = 1; k <= nPag; k++) {
+            capturar();
+             if (k!=1) {
+                paginador(k);
+              };
+        for (var j = 0; j < codigoUDS.length; j++) {
+            iimDisplay("UNIDAD  "+j+"  pagina "+k+"  Longitud del arreglo  "+codigoUDS.length);
+            //iimDisplay(codigoUDS[j]);
+            ingresarItenUDS(j);
+            vinc(codigoUDS[j]);
+        };   
     };
-    iimPlay(codigo);
-    codigoUDS[i]=iimGetExtract(i);
-  };
-  for (var j = 0; j < codigoUDS.length; j++) {
-      iimDisplay(codigoUDS[j]);
-      ingresarItenUDS(j);
-      vinc(codigoUDS[j]);
-  };
-  //***************************** FIN DEL CICLO QUE CAPTURA LAS UDS ***********************// 
+  function capturar(){
+    for (var i = 0; i < arreglo.length; i++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (i!=10) {
+        codigo += "TAG POS=R"+arreglo[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+      };
+      iimPlay(codigo);
+      codigoUDS[i]=iimGetExtract(i);
+    };
+  }
 }
-
-
-
 
 function ingresarItenUDS (dato) {
   var codigo = "CODE:\n";
@@ -282,7 +285,7 @@ function vinculadorDeBeneficiarios (uds) {
     for (var i = 0; i <= respuesta.length; i++) {
       //alert(respuesta[i].CODIGO_UDS+" "+uds);
         if (respuesta[i].CODIGO_UDS == uds) {
-        var codigo = "CODE:\n";
+        /*var codigo = "CODE:\n";
           codigo += "SET !TIMEOUT_STEP 5"+"\n";
           codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
           codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
@@ -304,9 +307,9 @@ function vinculadorDeBeneficiarios (uds) {
             iimDisplay(errtext);
             retornar();
           continue;
-        };
+        };*/
       }else{
-        alert(i);
+        //alert(i);
         break;
       };
   };
@@ -317,10 +320,32 @@ function vinculadorDeBeneficiarios (uds) {
 }
 
 function vincularBeneficiarios(){
-mostrarContratos ();
-recorridoVinculacion(1,10,430);
-  var codeUDS = new capturarUDS();
+  var datosJson = HTTPGET('http://localhost/lucy/contratos.json');
+  var respuesta = JSON.parse(datosJson);
+  var contrato = mostrarContratos ();//tiene alamacenado el numero de contrato seleccionado
+  var Nservicio = 0;
+  var cantidadUDS;
+  for (var i in respuesta) {
+    if (respuesta[i].NCONTRATO == contrato) {
+      Nservicio = respuesta[i].SERVICIOS;
+      cantidadUDS = new Array(respuesta[i].FAMI,respuesta[i].TRADI);
+    }else{
+      continue;
+    };
+  };
+  for (var j = 0; j < Nservicio; j++) {
+    var aux = 0;
+    var aux = (cantidadUDS[j]%10);
+    if (aux!=0) {
+      nPag = (cantidadUDS[j]/10);
+    }else{
+      nPag = ((cantidadUDS[j]/10)+1);   
+    };
+    recorridoVinculacion(j);    
+    capturarUDS(nPag); 
+  };
 }
+
 function guardarBeneficiarios (){
 	var aux = "";
 	var Url = new Ruta();
@@ -586,7 +611,7 @@ function buscarContrato(){
 }
 
 function paginador (pag){
-  //alert(pag);
+  iimDisplay("Entor a pagina:  "+pag);
   if(pag < 11){
     var pagina = "CODE:\n";
         pagina += "SET !TIMEOUT_STEP 20"+"\n";
