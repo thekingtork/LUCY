@@ -176,8 +176,12 @@ function mostrarContratos (){
   return nContrato;
 }
 function recorridoVinculacion(servicio){
-	var codigo = "CODE:\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
+  var Url = new Ruta();
+  var codigo = "CODE:\n";
+    if (servicio > 0) {
+      codigo += "URL GOTO="+Url.getDireccion(1)+"\n";
+    };
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
 		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioContratado_btnInfo_"+servicio+"\n";
 		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
 		//codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+departamento+"\n";
@@ -199,7 +203,7 @@ function vinc (_uds) {
   var datosJson =  HTTPGET('http://localhost/lucy/paraCargar.json');
   var respuesta = JSON.parse(datosJson);
            for (var j in respuesta) {
-            //iimDisplay("Busqueda "+j+" en UDS "+ _uds);
+            iimDisplay("Busqueda "+j+" en UDS "+ _uds);
                if (respuesta[j].CODIGO_UDS == _uds) {
                   codigo = "CODE:\n";
                   codigo += "SET !TIMEOUT_STEP 5"+"\n";
@@ -243,13 +247,14 @@ function capturarUDS(pag) {
   var arreglo = new Array("2","7","12","17","22","27","32","37","42","47");
   var nPag = pag;
   for (var k = 1; k <= nPag; k++) {
-            capturar();
+        iimDisplay(" la pagina es "+k);
              if (k!=1) {
                 paginador(k);
               };
+            capturar();
         for (var j = 0; j < codigoUDS.length; j++) {
             iimDisplay("UNIDAD  "+j+"  pagina "+k+"  Longitud del arreglo  "+codigoUDS.length);
-            //iimDisplay(codigoUDS[j]);
+            iimDisplay(codigoUDS[j]);
             ingresarItenUDS(j);
             vinc(codigoUDS[j]);
         };   
@@ -275,50 +280,6 @@ function ingresarItenUDS (dato) {
   iimPlay(codigo);
 }
 
-function vinculadorDeBeneficiarios (uds) {
-  //alert(uds);
-  var ejecutor;
-  var errtex = "";
-  var Url = new Ruta();
-    var datosJson =  HTTPGET('http://localhost/lucy/paraCargar.json');
-    var respuesta = JSON.parse(datosJson);
-    for (var i = 0; i <= respuesta.length; i++) {
-      //alert(respuesta[i].CODIGO_UDS+" "+uds);
-        if (respuesta[i].CODIGO_UDS == uds) {
-        /*var codigo = "CODE:\n";
-          codigo += "SET !TIMEOUT_STEP 5"+"\n";
-          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
-          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-          codigo += "WAIT SECONDS=1"+"\n";
-          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaVinculacion_txtFecha CONTENT=27/03/2014"+"\n";
-          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoDocumento CONTENT=%"+respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroDocumento CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_btnFiltrar"+"\n";
-          codigo += "WAIT SECONDS=1"+"\n";
-          codigo += "SET !TIMEOUT_STEP 1"+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_chkAdd_0 CONTENT=YES"+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaAtencion_txtFecha CONTENT=04/02/2015"+"\n";
-          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-         ejecutor = iimPlay(codigo);
-         if (ejecutor < 0) {              
-            errtext = iimGetLastError();
-            iimDisplay(errtext);
-            retornar();
-          continue;
-        };*/
-      }else{
-        //alert(i);
-        break;
-      };
-  };
-  codigo= null;
-   codigo = "CODE:\n";
-   codigo += "URL GOTO="+Url.getDireccion(6)+"\n";
-   iimPlay(codigo);
-}
-
 function vincularBeneficiarios(){
   var datosJson = HTTPGET('http://localhost/lucy/contratos.json');
   var respuesta = JSON.parse(datosJson);
@@ -334,15 +295,15 @@ function vincularBeneficiarios(){
     };
   };
   for (var j = 0; j < Nservicio; j++) {
-    var aux = 0;
     var aux = (cantidadUDS[j]%10);
     if (aux!=0) {
-      nPag = (cantidadUDS[j]/10);
+      var nPag = ((cantidadUDS[j]/10)+1);   
     }else{
-      nPag = ((cantidadUDS[j]/10)+1);   
+      var nPag = (cantidadUDS[j]/10);
     };
-    recorridoVinculacion(j);    
-    capturarUDS(nPag); 
+    var dato = parseInt(nPag);
+    recorridoVinculacion(j);
+    capturarUDS(dato);
   };
 }
 
