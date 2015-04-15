@@ -246,7 +246,8 @@ function capturarUDS(pag) {
   var arreglo = new Array("2","7","12","17","22","27","32","37","42","47");
   var nPag = pag;
   for (var k = 1; k <= nPag; k++) {
-        iimDisplay(" la pagina es "+k);
+   iimDisplay(nPag);
+       iimDisplay(" la pagina es "+k);
              if (k!=1) {
                 paginador(k);
               };
@@ -259,7 +260,7 @@ function capturarUDS(pag) {
              if (k!=1) {
                 paginador(k);
               };
-        };   
+        }; 
     };
   function capturar(){
     for (var i = 0; i < arreglo.length; i++) {
@@ -279,6 +280,7 @@ function ingresarItenUDS (dato) {
     codigo += "SET !EXTRACT NULL"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioUnidad_btnInfo_"+dato+"\n";
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
+    //codigo += "BACK"+"\n";
   iimPlay(codigo);
 }
 
@@ -304,8 +306,10 @@ function vincularBeneficiarios(){
       var nPag = (cantidadUDS[j]/10);
     };
     var dato = parseInt(nPag);
+
     recorridoVinculacion(j);
     capturarUDS(dato);
+    iimDisplay(dato);
   };
 }
 
@@ -531,13 +535,22 @@ function asignarServicio (codigoUDS,cupoUds) {
 }
 //Funciones imacros
 function accederCuentame () {
+  var Url = new Ruta();
+  var datosJson =  HTTPGET('http://localhost/lucy/acceso.json');
+  var respuesta = JSON.parse(datosJson);
+  var texto = "";
+      for (var i = 0; i < respuesta.length; i++) {
+        texto += "["+i+"] "+respuesta[i].EAS+"\n";
+      };
+  var dato = prompt('Seleccione el USUARIO a acceder'+"\n"+"\n"+texto,"");
+  //iimDisplay(respuesta[dato].USER+" "+respuesta[dato].PASS);
   var codigo = "CODE:\n";
     codigo += "URL GOTO=https://rubonline.icbf.gov.co/"+"\n";
-    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=NAME:loGeneraciones$UserName CONTENT=victor.puello"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=NAME:loGeneraciones$UserName CONTENT="+respuesta[dato].USER+"\n";
     codigo += "SET !ENCRYPTION NO"+"\n";
-    codigo += "TAG POS=1 TYPE=INPUT:PASSWORD FORM=ID:form1 ATTR=NAME:loGeneraciones$Password CONTENT=samy1025"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:PASSWORD FORM=ID:form1 ATTR=NAME:loGeneraciones$Password CONTENT="+respuesta[dato].PASS+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:SUBMIT FORM=ID:form1 ATTR=NAME:loGeneraciones$LoginButton"+"\n";
-  iimPlay(codigo);
+    iimPlay(codigo);
   core();
 }
 function buscarContrato(){
@@ -573,7 +586,7 @@ function buscarContrato(){
 }
 
 function paginador (pag){
-  iimDisplay("Entor a pagina:  "+pag);
+  iimDisplay("Entro a pagina:  "+pag);
   if(pag < 11){
     var pagina = "CODE:\n";
         pagina += "SET !TIMEOUT_STEP 20"+"\n";
