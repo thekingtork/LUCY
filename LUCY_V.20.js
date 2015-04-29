@@ -52,6 +52,7 @@ function Tareas () {
     Tare [4] = "Ingresar Beneficiarios";
     Tare [5] = "Vincular Beneficiarios a UDS";
     Tare [6] = "Ingresar Peso && Talla";
+    Tare [7] = "Modificar fechas de Nac";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -60,7 +61,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -83,6 +84,9 @@ Tareas.prototype.mostrarMenu = function() {
           break
         case "6":
           
+          break
+        case "7":
+            modificarFnac();
           break
         default:
             break
@@ -111,6 +115,25 @@ function Ruta () {
     direccion[6]="https://rubonline.icbf.gov.co/Page/RubOnline/VincularUDSContrato/List.aspx";
   this.getDireccion = function (pos) {
     return direccion[pos];
+  }
+}
+
+function modificarFnac(){
+  var datosJson =  HTTPGET('http://localhost/lucy/fnac.json');
+  var respuesta = JSON.parse(datosJson);
+  var Url = new Ruta();
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].Documento+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "SET !TIMEOUT_STEP 20"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaNacimiento_txtFecha CONTENT="+respuesta[i].FechaNacimiento+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    iimPlay(codigo);
   }
 }
 
@@ -189,7 +212,7 @@ function recorridoVinculacion(servicio){
 		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
 		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+10+"\n";
 		codigo += "WAIT SECONDS=1"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+448+"\n";
+		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+437+"\n";
 		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
 	iimPlay(codigo);	
 }
@@ -240,7 +263,7 @@ function vinc (_uds) {
        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+10+"\n";
        codigo += "WAIT SECONDS=1"+"\n";
        codigo += "SET !TIMEOUT_STEP 5"+"\n";
-       codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+429+"\n";
+       codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+437+"\n";
        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
        iimPlay(codigo);
 }
@@ -249,7 +272,7 @@ function capturarUDS(pag) {
   var codigoUDS = new Array();
   var arreglo = new Array("2","7","12","17","22","27","32","37","42","47");
   var nPag = pag;
-  for (var k = 4; k <= nPag; k++) {
+  for (var k = 1; k <= nPag; k++) {
    iimDisplay(nPag);
        iimDisplay(" la pagina es "+k);
              if (k!=1) {
