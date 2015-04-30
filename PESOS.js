@@ -595,7 +595,7 @@ function validar_datos (pos){
 		    codigo += "TAG POS=R"+pos*8+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
 		    codigo += "SET !VAR1 {{!EXTRACT}}"+"\n";
 		iimPlay(codigo);
-		cantidad_tomas = iimGetLastExtract(1);
+		return  iimGetLastExtract(1);
 }
 function datos_ini (){
 		cantidad_pag = prompt('Ingresa el numero de PG a procesar:','');
