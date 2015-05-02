@@ -418,7 +418,7 @@ function paginador (pag){
         pagina += "TAG POS=1 TYPE=A ATTR=TXT:"+pag+"\n";
         pagina += "SET !TIMEOUT_STEP 20"+"\n";
     iimPlay(pagina);
-    tiempo(1);
+    //tiempo(1);
   }
   else{
     if (pag == 11) {
@@ -458,15 +458,15 @@ function cargarUDS (){
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlServicio CONTENT=%"+respuesta[i].Servicio+"\n";
     iimDisplay(respuesta[i].Codigo_UDS);
     iimPlay(codigo);
-    for (var j = 1; j <= respuesta[i].nPag; i++) {
-      capturarCC(j,respuesta[i].nBeneficiarios);
-    };
+    capturarCC(respuesta[i].nPag,respuesta[i].nBeneficiarios);
   }
 }
 function capturarCC(pag,users) {
   iimDisplay(users);
   var IdBenef = new Array();
+  var TomasBenef = new Array();
   var arreglo = new Array("3","11","19","27","35","43","51","59","67","75");
+  var arreglo2 = new Array("8","16","24","32","40","48","56","64","72","80");
   var nPag = pag;
   var nBene = 0;
   if (users < 10 ) {
@@ -481,19 +481,25 @@ function capturarCC(pag,users) {
              if (k!=1) {
                 paginador(k);
               };
-            capturar();
+            capturarCedula();
+            capturarNtomas();
         for (var j = 0; j < nBene; j++) {
             iimDisplay("UNIDAD  "+j+"  pagina "+k+"  cantidad de Beneficiarios  "+nBene);
             iimDisplay(IdBenef[j]);
-            ingresarItenUDS(j);
-            buscarUser(IdBenef[j]);
-            //vinc(IdBenef[j]);
+            switch(TomasBenef[j]){
+              case "0":
+                ingresarItenBENE(j);
+                buscarUser(IdBenef[j]);
+                break;
+              default:
+                break;
+            }
              if (k!=1) {
                 paginador(k);
               };
         }; 
     };
-function capturar(){    
+function capturarCedula(){    
     for (var i = 0; i < nBene ; i++) {
       var codigo = "CODE:\n";
       codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
@@ -504,6 +510,19 @@ function capturar(){
       };
       iimPlay(codigo);
       IdBenef[i]=iimGetExtract(i);
+    };
+  }
+function capturarNtomas(){    
+    for (var i = 0; i < nBene ; i++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (i!=10) {
+         iimDisplay(i);
+        codigo += "TAG POS=R"+arreglo2[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
+      };
+      iimPlay(codigo);
+      TomasBenef[i]=iimGetExtract(i);
     };
   }
 }
@@ -520,18 +539,26 @@ function buscarUser(id){
                   peso = generar_peso(respuesta[j].sexo,talla);
                   var codigo = "CODE:\n";
                   codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbCarneSaludVigente_0"+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=04/02/2015"+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
-                  if (respuesta[j].tipoBene == 5) {
-                    codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
-                  }else{
-                    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12+"\n";
-                    codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
+                  switch(respuesta[j].tipoBene){
+                    case 5:
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
+                      break;
+                    case 2:
+                      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12)+"\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+                      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
+                      break;
+                    default:
+                      break;
                   };
                   codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+                  codigo += "SET !TIMEOUT_STEP 60"+"\n";
+                  codigo += "WAIT SECONDS= 1"+"\n";
                   ejecutor = iimPlay(codigo);
                   if (ejecutor < 0) {              
                     errtext = iimGetLastError();
@@ -544,11 +571,6 @@ function buscarUser(id){
                 continue;
               };
   };
-  codigo= null;
-  codigo = "CODE:\n";
-  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-  
-  iimPlay(codigo);
 }
 function retornar2 () {
    var codigo = "CODE:\n";
@@ -590,7 +612,7 @@ function generar_peso (sexo,talla) {
       if (parseInt(talla) <=127) {
         peso1 = peso_ninos[parseInt(talla)][Math.floor(Math.random()*3 + 2)];
       }else{
-        alert("No existen hombres Lactantes/Gestante")
+        //alert("No existen hombres Lactantes/Gestante")
       };
     }
     else{
@@ -599,12 +621,11 @@ function generar_peso (sexo,talla) {
   return peso1;
 }
 
-function ingresarItenUDS (dato) {
+function ingresarItenBENE (dato) {
   var codigo = "CODE:\n";
     codigo += "SET !EXTRACT NULL"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_"+dato+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-    //codigo += "BACK"+"\n";
   iimPlay(codigo);
 }
 cargarUDS();

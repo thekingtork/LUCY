@@ -695,43 +695,44 @@ function paginador (pag){
   }
   
 }
-peso_mujeres = new Array();
-      peso_mujeres[150]  = new Array (Math.floor(Math.random() * 45) + 47,Math.floor(Math.random() * 46) + 50,Math.floor(Math.random() *47 ) + 52 );
-      peso_mujeres[151]  = new Array (Math.floor(Math.random() * 45) + 47,Math.floor(Math.random() * 46) + 50,Math.floor(Math.random() *47 ) + 52 );
-      peso_mujeres[152]  = new Array (Math.floor(Math.random() * 46) + 48,Math.floor(Math.random() * 47) + 52,Math.floor(Math.random() *48 ) + 54 );
-      peso_mujeres[153]  = new Array (Math.floor(Math.random() * 46) + 48,Math.floor(Math.random() * 47) + 52,Math.floor(Math.random() *48 ) + 54 );
-      peso_mujeres[154]  = new Array (Math.floor(Math.random() * 47) + 49,Math.floor(Math.random() * 48) + 53,Math.floor(Math.random() *49 ) + 55 );
-      peso_mujeres[155]  = new Array (Math.floor(Math.random() * 47) + 49,Math.floor(Math.random() * 48) + 53,Math.floor(Math.random() *49 ) + 55 );
-      peso_mujeres[156]  = new Array (Math.floor(Math.random() * 48) + 51,Math.floor(Math.random() * 49) + 54,Math.floor(Math.random() *51 ) + 57 );
-      peso_mujeres[157]  = new Array (Math.floor(Math.random() * 48) + 51,Math.floor(Math.random() * 49) + 54,Math.floor(Math.random() *51 ) + 57 );
-      peso_mujeres[158]  = new Array (Math.floor(Math.random() * 49) + 52,Math.floor(Math.random() * 51) + 56,Math.floor(Math.random() *52 ) + 58 );
-      peso_mujeres[159]  = new Array (Math.floor(Math.random() * 49) + 52,Math.floor(Math.random() * 51) + 56,Math.floor(Math.random() *52 ) + 58 );
-      peso_mujeres[160]  = new Array (Math.floor(Math.random() * 51) + 53,Math.floor(Math.random() * 52) + 57,Math.floor(Math.random() *53 ) + 60 );
-      peso_mujeres[161]  = new Array (Math.floor(Math.random() * 51) + 53,Math.floor(Math.random() * 52) + 57,Math.floor(Math.random() *53 ) + 60 );
-      peso_mujeres[162]  = new Array (Math.floor(Math.random() * 52) + 55,Math.floor(Math.random() * 53) + 59,Math.floor(Math.random() *55 ) + 61 );
-      peso_mujeres[163]  = new Array (Math.floor(Math.random() * 52) + 55,Math.floor(Math.random() * 53) + 59,Math.floor(Math.random() *55 ) + 61 );
-      peso_mujeres[164]  = new Array (Math.floor(Math.random() * 53) + 56,Math.floor(Math.random() * 55) + 60,Math.floor(Math.random() *56 ) + 63 );
-      peso_mujeres[165]  = new Array (Math.floor(Math.random() * 53) + 56,Math.floor(Math.random() * 55) + 60,Math.floor(Math.random() *56 ) + 63 );
-      peso_mujeres[166]  = new Array (Math.floor(Math.random() * 55) + 57,Math.floor(Math.random() * 56) + 62,Math.floor(Math.random() *57 ) + 64 );
-      peso_mujeres[167]  = new Array (Math.floor(Math.random() * 55) + 57,Math.floor(Math.random() * 56) + 62,Math.floor(Math.random() *57 ) + 64 );
-      peso_mujeres[168]  = new Array (Math.floor(Math.random() * 56) + 59,Math.floor(Math.random() * 57) + 63,Math.floor(Math.random() *59 ) + 66 );
-      peso_mujeres[169]  = new Array (Math.floor(Math.random() * 56) + 59,Math.floor(Math.random() * 57) + 63,Math.floor(Math.random() *59 ) + 66 );
-      peso_mujeres[170]  = new Array (Math.floor(Math.random() * 57) + 60,Math.floor(Math.random() * 59) + 65,Math.floor(Math.random() *60 ) + 67 );
-      peso_mujeres[171]  = new Array (Math.floor(Math.random() * 57) + 60,Math.floor(Math.random() * 59) + 65,Math.floor(Math.random() *60 ) + 67 );
-      peso_mujeres[172]  = new Array (Math.floor(Math.random() * 59) + 62,Math.floor(Math.random() * 60) + 66,Math.floor(Math.random() *62 ) + 69 );
-      peso_mujeres[173]  = new Array (Math.floor(Math.random() * 59) + 62,Math.floor(Math.random() * 60) + 66,Math.floor(Math.random() *62 ) + 69 );
-      peso_mujeres[174]  = new Array (Math.floor(Math.random() * 60) + 63,Math.floor(Math.random() * 62) + 68,Math.floor(Math.random() *63 ) + 71 );
-      peso_mujeres[175]  = new Array (Math.floor(Math.random() * 60) + 63,Math.floor(Math.random() * 62) + 68,Math.floor(Math.random() *63 ) + 71 );
-      peso_mujeres[176]  = new Array (Math.floor(Math.random() * 62) + 65,Math.floor(Math.random() * 63) + 69,Math.floor(Math.random() *65 ) + 72 );
-      peso_mujeres[177]  = new Array (Math.floor(Math.random() * 62) + 65,Math.floor(Math.random() * 63) + 69,Math.floor(Math.random() *65 ) + 72 );
-      peso_mujeres[178]  = new Array (Math.floor(Math.random() * 63) + 66,Math.floor(Math.random() * 65) + 71,Math.floor(Math.random() *66 ) + 74 );
-      peso_mujeres[179]  = new Array (Math.floor(Math.random() * 63) + 66,Math.floor(Math.random() * 65) + 71,Math.floor(Math.random() *66 ) + 74 );
-      peso_mujeres[180]  = new Array (Math.floor(Math.random() * 64) + 68,Math.floor(Math.random() * 66) + 72,Math.floor(Math.random() *68 ) + 76 );
-      peso_mujeres[181]  = new Array (Math.floor(Math.random() * 64) + 68,Math.floor(Math.random() * 66) + 72,Math.floor(Math.random() *68 ) + 76 );
-      peso_mujeres[182]  = new Array (Math.floor(Math.random() * 66) + 69,Math.floor(Math.random() * 67) + 74,Math.floor(Math.random() *69 ) + 77 );
-      peso_mujeres[183]  = new Array (Math.floor(Math.random() * 66) + 69,Math.floor(Math.random() * 67) + 74,Math.floor(Math.random() *69 ) + 77 );
-      peso_mujeres[184]  = new Array (Math.floor(Math.random() * 67) + 71,Math.floor(Math.random() * 69) + 76,Math.floor(Math.random() *71 ) + 79 );
-      peso_mujeres[185]  = new Array (Math.floor(Math.random() * 67) + 71,Math.floor(Math.random() * 69) + 76,Math.floor(Math.random() *71 ) + 79 );
+      peso_mujeres = new Array();
+      peso_mujeres[150]  = new Array (Math.floor(Math.random() * (47 - 45 + 1)) + 45,Math.floor(Math.random() *(50 - 46 + 1)) + 46,Math.floor(Math.random() *(52 - 47 + 1) + 47 ));
+peso_mujeres[151]  = new Array (Math.floor(Math.random() * (47 - 45 + 1)) + 45,Math.floor(Math.random() *(50 - 46 + 1)) + 46,Math.floor(Math.random() *(52 - 47 + 1) + 47 ));
+peso_mujeres[152]  = new Array (Math.floor(Math.random() * (48 - 46 + 1)) + 46,Math.floor(Math.random() *(52 - 47 + 1)) + 47,Math.floor(Math.random() *(54 - 48 + 1) + 48 ));
+peso_mujeres[153]  = new Array (Math.floor(Math.random() * (48 - 46 + 1)) + 46,Math.floor(Math.random() *(52 - 47 + 1)) + 47,Math.floor(Math.random() *(54 - 48 + 1) + 48 ));
+peso_mujeres[154]  = new Array (Math.floor(Math.random() * (49 - 47 + 1)) + 47,Math.floor(Math.random() *(53 - 48 + 1)) + 48,Math.floor(Math.random() *(55 - 49 + 1) + 49 ));
+peso_mujeres[155]  = new Array (Math.floor(Math.random() * (49 - 47 + 1)) + 47,Math.floor(Math.random() *(53 - 48 + 1)) + 48,Math.floor(Math.random() *(55 - 49 + 1) + 49 ));
+peso_mujeres[156]  = new Array (Math.floor(Math.random() * (51 - 48 + 1)) + 48,Math.floor(Math.random() *(54 - 49 + 1)) + 49,Math.floor(Math.random() *(57 - 51 + 1) + 51 ));
+peso_mujeres[157]  = new Array (Math.floor(Math.random() * (51 - 48 + 1)) + 48,Math.floor(Math.random() *(54 - 49 + 1)) + 49,Math.floor(Math.random() *(57 - 51 + 1) + 51 ));
+peso_mujeres[158]  = new Array (Math.floor(Math.random() * (52 - 49 + 1)) + 49,Math.floor(Math.random() *(56 - 51 + 1)) + 51,Math.floor(Math.random() *(58 - 52 + 1) + 52 ));
+peso_mujeres[159]  = new Array (Math.floor(Math.random() * (52 - 49 + 1)) + 49,Math.floor(Math.random() *(56 - 51 + 1)) + 51,Math.floor(Math.random() *(58 - 52 + 1) + 52 ));
+peso_mujeres[160]  = new Array (Math.floor(Math.random() * (53 - 51 + 1)) + 51,Math.floor(Math.random() *(57 - 52 + 1)) + 52,Math.floor(Math.random() *(60 - 53 + 1) + 53 ));
+peso_mujeres[161]  = new Array (Math.floor(Math.random() * (53 - 51 + 1)) + 51,Math.floor(Math.random() *(57 - 52 + 1)) + 52,Math.floor(Math.random() *(60 - 53 + 1) + 53 ));
+peso_mujeres[162]  = new Array (Math.floor(Math.random() * (55 - 52 + 1)) + 52,Math.floor(Math.random() *(59 - 53 + 1)) + 53,Math.floor(Math.random() *(61 - 55 + 1) + 55 ));
+peso_mujeres[163]  = new Array (Math.floor(Math.random() * (55 - 52 + 1)) + 52,Math.floor(Math.random() *(59 - 53 + 1)) + 53,Math.floor(Math.random() *(61 - 55 + 1) + 55 ));
+peso_mujeres[164]  = new Array (Math.floor(Math.random() * (56 - 53 + 1)) + 53,Math.floor(Math.random() *(60 - 55 + 1)) + 55,Math.floor(Math.random() *(63 - 56 + 1) + 56 ));
+peso_mujeres[165]  = new Array (Math.floor(Math.random() * (56 - 53 + 1)) + 53,Math.floor(Math.random() *(60 - 55 + 1)) + 55,Math.floor(Math.random() *(63 - 56 + 1) + 56 ));
+peso_mujeres[166]  = new Array (Math.floor(Math.random() * (57 - 55 + 1)) + 55,Math.floor(Math.random() *(62 - 56 + 1)) + 56,Math.floor(Math.random() *(64 - 57 + 1) + 57 ));
+peso_mujeres[167]  = new Array (Math.floor(Math.random() * (57 - 55 + 1)) + 55,Math.floor(Math.random() *(62 - 56 + 1)) + 56,Math.floor(Math.random() *(64 - 57 + 1) + 57 ));
+peso_mujeres[168]  = new Array (Math.floor(Math.random() * (59 - 56 + 1)) + 56,Math.floor(Math.random() *(63 - 57 + 1)) + 57,Math.floor(Math.random() *(66 - 59 + 1) + 59 ));
+peso_mujeres[169]  = new Array (Math.floor(Math.random() * (59 - 56 + 1)) + 56,Math.floor(Math.random() *(63 - 57 + 1)) + 57,Math.floor(Math.random() *(66 - 59 + 1) + 59 ));
+peso_mujeres[170]  = new Array (Math.floor(Math.random() * (60 - 57 + 1)) + 57,Math.floor(Math.random() *(65 - 59 + 1)) + 59,Math.floor(Math.random() *(67 - 60 + 1) + 60 ));
+peso_mujeres[171]  = new Array (Math.floor(Math.random() * (60 - 57 + 1)) + 57,Math.floor(Math.random() *(65 - 59 + 1)) + 59,Math.floor(Math.random() *(67 - 60 + 1) + 60 ));
+peso_mujeres[172]  = new Array (Math.floor(Math.random() * (62 - 59 + 1)) + 59,Math.floor(Math.random() *(66 - 60 + 1)) + 60,Math.floor(Math.random() *(69 - 62 + 1) + 62 ));
+peso_mujeres[173]  = new Array (Math.floor(Math.random() * (62 - 59 + 1)) + 59,Math.floor(Math.random() *(66 - 60 + 1)) + 60,Math.floor(Math.random() *(69 - 62 + 1) + 62 ));
+peso_mujeres[174]  = new Array (Math.floor(Math.random() * (63 - 60 + 1)) + 60,Math.floor(Math.random() *(68 - 62 + 1)) + 62,Math.floor(Math.random() *(71 - 63 + 1) + 63 ));
+peso_mujeres[175]  = new Array (Math.floor(Math.random() * (63 - 60 + 1)) + 60,Math.floor(Math.random() *(68 - 62 + 1)) + 62,Math.floor(Math.random() *(71 - 63 + 1) + 63 ));
+peso_mujeres[176]  = new Array (Math.floor(Math.random() * (65 - 62 + 1)) + 62,Math.floor(Math.random() *(69 - 63 + 1)) + 63,Math.floor(Math.random() *(72 - 65 + 1) + 65 ));
+peso_mujeres[177]  = new Array (Math.floor(Math.random() * (65 - 62 + 1)) + 62,Math.floor(Math.random() *(69 - 63 + 1)) + 63,Math.floor(Math.random() *(72 - 65 + 1) + 65 ));
+peso_mujeres[178]  = new Array (Math.floor(Math.random() * (66 - 63 + 1)) + 63,Math.floor(Math.random() *(71 - 65 + 1)) + 65,Math.floor(Math.random() *(74 - 66 + 1) + 66 ));
+peso_mujeres[179]  = new Array (Math.floor(Math.random() * (66 - 63 + 1)) + 63,Math.floor(Math.random() *(71 - 65 + 1)) + 65,Math.floor(Math.random() *(74 - 66 + 1) + 66 ));
+peso_mujeres[180]  = new Array (Math.floor(Math.random() * (68 - 64 + 1)) + 64,Math.floor(Math.random() *(72 - 66 + 1)) + 66,Math.floor(Math.random() *(76 - 68 + 1) + 68 ));
+peso_mujeres[181]  = new Array (Math.floor(Math.random() * (68 - 64 + 1)) + 64,Math.floor(Math.random() *(72 - 66 + 1)) + 66,Math.floor(Math.random() *(76 - 68 + 1) + 68 ));
+peso_mujeres[182]  = new Array (Math.floor(Math.random() * (69 - 66 + 1)) + 66,Math.floor(Math.random() *(74 - 67 + 1)) + 67,Math.floor(Math.random() *(77 - 69 + 1) + 69 ));
+peso_mujeres[183]  = new Array (Math.floor(Math.random() * (69 - 66 + 1)) + 66,Math.floor(Math.random() *(74 - 67 + 1)) + 67,Math.floor(Math.random() *(77 - 69 + 1) + 69 ));
+peso_mujeres[184]  = new Array (Math.floor(Math.random() * (71 - 67 + 1)) + 67,Math.floor(Math.random() *(76 - 69 + 1)) + 69,Math.floor(Math.random() *(79 - 71 + 1) + 71 ));
+peso_mujeres[185]  = new Array (Math.floor(Math.random() * (71 - 67 + 1)) + 67,Math.floor(Math.random() *(76 - 69 + 1)) + 69,Math.floor(Math.random() *(79 - 71 + 1) + 71 ));
+
 
       talla_ninas = new Array (); 
       talla_ninas[0]  = new Array ('44.0','47.8','49.5','51.5','53.0');
@@ -1078,15 +1079,15 @@ function cargarUDS (){
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlServicio CONTENT=%"+respuesta[i].Servicio+"\n";
     iimDisplay(respuesta[i].Codigo_UDS);
     iimPlay(codigo);
-    for (var j = 1; j <= respuesta[i].nPag; i++) {
-      capturarCC(j,respuesta[i].nBeneficiarios);
-    };
+    capturarCC(respuesta[i].nPag,respuesta[i].nBeneficiarios);
   }
 }
 function capturarCC(pag,users) {
   iimDisplay(users);
   var IdBenef = new Array();
+  var TomasBenef = new Array();
   var arreglo = new Array("3","11","19","27","35","43","51","59","67","75");
+  var arreglo2 = new Array("8","16","24","32","40","48","56","64","72","80");
   var nPag = pag;
   var nBene = 0;
   if (users < 10 ) {
@@ -1101,17 +1102,51 @@ function capturarCC(pag,users) {
              if (k!=1) {
                 paginador(k);
               };
-            capturar2();
+            capturarCedula();
+            capturarNtomas();
         for (var j = 0; j < nBene; j++) {
             iimDisplay("UNIDAD  "+j+"  pagina "+k+"  cantidad de Beneficiarios  "+nBene);
             iimDisplay(IdBenef[j]);
-            ingresarItenBENE(j);
-            buscarUser(IdBenef[j]);
+            switch(TomasBenef[j]){
+              case "0":
+                ingresarItenBENE(j);
+                buscarUser(IdBenef[j]);
+                break;
+              default:
+                break;
+            }
              if (k!=1) {
                 paginador(k);
               };
         }; 
     };
+function capturarCedula(){    
+    for (var i = 0; i < nBene ; i++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (i!=10) {
+         iimDisplay(i);
+        codigo += "TAG POS=R"+arreglo[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
+      };
+      iimPlay(codigo);
+      IdBenef[i]=iimGetExtract(i);
+    };
+  }
+function capturarNtomas(){    
+    for (var i = 0; i < nBene ; i++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (i!=10) {
+         iimDisplay(i);
+        codigo += "TAG POS=R"+arreglo2[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
+      };
+      iimPlay(codigo);
+      TomasBenef[i]=iimGetExtract(i);
+    };
+  }
+}
 function buscarUser(id){
   var ejecutor;
   var errtex = ""; 
@@ -1121,42 +1156,50 @@ function buscarUser(id){
   var peso = 0;
   for (var j in respuesta) {
     if (respuesta[j].nId == id) {
-      talla = calcularTalla(respuesta[j].fnac,respuesta[j].sexo);
-      peso = generar_peso(respuesta[j].sexo,talla);
-      var codigo = "CODE:\n";
-      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbCarneSaludVigente_0"+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=04/02/2015"+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
-      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
-      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-      ejecutor = iimPlay(codigo);
-        if (ejecutor < 0) {              
-          errtext = iimGetLastError();
-          iimDisplay(errtext);
-          retornar2();
-        };
-          retornar2();
-          break;
-        }else{
-         continue;
-     };
+                  talla = calcularTalla(respuesta[j].fnac,respuesta[j].sexo);
+                  peso = generar_peso(respuesta[j].sexo,talla);
+                  var codigo = "CODE:\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbCarneSaludVigente_0"+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=04/02/2015"+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
+                  switch(respuesta[j].tipoBene){
+                    case 5:
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
+                      break;
+                    case 2:
+                      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12)+"\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+                      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
+                      break;
+                    default:
+                      break;
+                  };
+                  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+                  codigo += "SET !TIMEOUT_STEP 60"+"\n";
+                  codigo += "WAIT SECONDS= 1"+"\n";
+                  ejecutor = iimPlay(codigo);
+                  if (ejecutor < 0) {              
+                    errtext = iimGetLastError();
+                    iimDisplay(errtext);
+                    retornar2();
+                  };
+                  retornar2();
+                  break;
+               }else{
+                continue;
+              };
   };
-  codigo= null;
-  codigo = "CODE:\n";
-  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-  iimPlay(codigo);
 }
-
 function retornar2 () {
    var codigo = "CODE:\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
    iimPlay(codigo);
 }
 function generarTallaAdultos () {
-  return (Math.floor(Math.random() * 150) + 185)
+  return Math.floor(Math.random() * (185 -150 + 1)) + 150
 }
 function calcularTalla(fnac,sexo){
   var meses_vividos = Math.floor((restaFechas(fnac,'04/02/2015')/365)*12);
@@ -1182,14 +1225,15 @@ function generar_peso (sexo,talla) {
       if (parseInt(talla) <=127) {
           peso1 = peso_ninas[parseInt(talla)][Math.floor(Math.random()*3 + 2)];
         }else{
-          peso1 = peso_mujeres[parseInt(talla)][Math.floor(Math.random() * 0) + 2];
+          //alert("la talla"+parseInt(talla)+"aleatorio"+Math.floor(Math.random()*2 + 1))
+          peso1 = peso_mujeres[parseInt(talla)][Math.floor(Math.random()*2 + 1)];
         };
     }
     else if (sexo == "M") {
       if (parseInt(talla) <=127) {
         peso1 = peso_ninos[parseInt(talla)][Math.floor(Math.random()*3 + 2)];
       }else{
-        alert("No existen hombres Lactantes/Gestante")
+        //alert("No existen hombres Lactantes/Gestante")
       };
     }
     else{
@@ -1197,26 +1241,12 @@ function generar_peso (sexo,talla) {
     }
   return peso1;
 }
-function capturar2(){    
-    for (var i = 0; i < nBene ; i++) {
-      var codigo = "CODE:\n";
-      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
-      if (i!=10) {
-         iimDisplay(i);
-        codigo += "TAG POS=R"+arreglo[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
-      };
-      iimPlay(codigo);
-      IdBenef[i]=iimGetExtract(i);
-    };
-  }
-}
+
 function ingresarItenBENE (dato) {
   var codigo = "CODE:\n";
     codigo += "SET !EXTRACT NULL"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_"+dato+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-    //codigo += "BACK"+"\n";
   iimPlay(codigo);
 }
 
