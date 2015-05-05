@@ -1090,13 +1090,14 @@ function capturarCC(pag,users) {
   var arreglo2 = new Array("8","16","24","32","40","48","56","64","72","80");
   var nPag = pag;
   var nBene = 0;
-  if (users < 10 ) {
-    nBene = users;
-  }else{
-    iimDisplay("Entro"+users);
-    nBene = arreglo.length;
-  };
+  var limite = users;
   for (var k = 1; k <= nPag; k++) {
+    if (limite < 10 ) {
+        nBene = limite;
+      }else{
+        iimDisplay("Entro"+limite);
+        nBene = 10;
+      };
    iimDisplay(nPag);
        iimDisplay(" la pagina es "+k+" el numero de bene"+nBene);
              if (k!=1) {
@@ -1104,21 +1105,22 @@ function capturarCC(pag,users) {
               };
             capturarCedula();
             capturarNtomas();
-        for (var j = 0; j < nBene; j++) {
+        for (var j = 0; j <= nBene; j++) {
             iimDisplay("UNIDAD  "+j+"  pagina "+k+"  cantidad de Beneficiarios  "+nBene);
             iimDisplay(IdBenef[j]);
             switch(TomasBenef[j]){
               case "0":
                 ingresarItenBENE(j);
                 buscarUser(IdBenef[j]);
+                 if (k!=1) {
+                    paginador(k);
+                  };
                 break;
               default:
                 break;
             }
-             if (k!=1) {
-                paginador(k);
-              };
         }; 
+        limite = limite-10;
     };
 function capturarCedula(){    
     for (var i = 0; i < nBene ; i++) {
@@ -1164,14 +1166,19 @@ function buscarUser(id){
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
-                  switch(respuesta[j].tipoBene){
+                   switch(respuesta[j].tipoBene){
                     case 5:
                       codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
+                      //codigo += "WAIT SECONDS= 1"+"\n";
                       codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
+                      //codigo += "WAIT SECONDS= 1"+"\n";
                       break;
                     case 2:
+                    //  codigo += "WAIT SECONDS= 1"+"\n";
                       codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12)+"\n";
+                      //codigo += "WAIT SECONDS= 1"+"\n";
                       codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+                      //codigo += "WAIT SECONDS= 1"+"\n";
                       codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
                       break;
                     default:
