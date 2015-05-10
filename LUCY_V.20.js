@@ -119,8 +119,13 @@ function Ruta () {
 }
 
 function modificarFnac(){
+  var hoy = new Date().toJSON().slice(0,10);
   var datosJson =  HTTPGET('http://localhost/lucy/fnac.json');
   var respuesta = JSON.parse(datosJson);
+  var resultado = "TIPO_ID;NUMERO_ID;FECHA_NACIMIENTO;ESTADO\r\n";
+   hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_Estado_Beneficiarios_"+hoy+".csv",resultado);
+   resultado ="";
+  var ejecutor;
   var Url = new Ruta();
   for (var i = 0; i <= respuesta.length; i++) {
     var codigo = "CODE:\n";
@@ -133,8 +138,16 @@ function modificarFnac(){
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaNacimiento_txtFecha CONTENT="+respuesta[i].FechaNacimiento+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-    iimPlay(codigo);
+    ejecutor = iimPlay(codigo);
+      if (ejecutor < 0) {
+        errtext = iimGetLastError();
+        iimDisplay(errtext);
+        resultado ="";
+        resultado += respuesta[i].TipoDocumento+";"+respuesta[i].Documento+";"+respuesta[i].FechaNacimiento+";"+"NO MODIFICADA\r\n";
+        hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_Estado_Beneficiarios_"+hoy+".csv",resultado);
+      };
   }
+
 }
 
 function buscarBeneficiarios () {
