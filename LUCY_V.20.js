@@ -1331,6 +1331,7 @@ function generar_peso (sexo,talla) {
 function ingresarItenBENE (dato) {
   var codigo = "CODE:\n";
     codigo += "SET !EXTRACT NULL"+"\n";
+    codigo += "SET !TIMEOUT_STEP 60"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_"+dato+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
   iimPlay(codigo);
@@ -1338,6 +1339,7 @@ function ingresarItenBENE (dato) {
 function ingresarItenBENE2 (dato) {
   var codigo = "CODE:\n";
     codigo += "SET !EXTRACT NULL"+"\n";
+    codigo += "SET !TIMEOUT_STEP 60"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_"+dato+"\n";
     //codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
   iimPlay(codigo);
