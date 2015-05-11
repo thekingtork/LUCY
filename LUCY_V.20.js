@@ -1197,13 +1197,16 @@ function toma2(tipoID){
       codigo += "SET !EXTRACT_TEST_POPUP YES"+"\n";
       codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
       codigo += "TAG POS=R7 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-      //VAR1 GUARDA EL PESO 1
       codigo += "SET !VAR1 {{!EXTRACT}}"+"\n";
       codigo += "SET !EXTRACT NULL"+"\n";
       codigo += "TAG POS=1 TYPE=TD ATTR=TXT:{{!VAR1}}"+ "\n";
       codigo += "TAG POS=R1 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
       //VAR2 GUARDA LA TALLA 1
       codigo += "SET !VAR2 {{!EXTRACT}}"+"\n";
+      codigo += "SET !EXTRACT NULL"+"\n";
+      codigo += "TAG POS=1 TYPE=TD ATTR=TXT:{{!VAR2}}"+ "\n";
+      codigo += "TAG POS=R1 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+      codigo += "SET !VAR5 {{!EXTRACT}}"+"\n";
       codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
       codigo += "WAIT SECONDS = 1"+"\n";
       switch(tipoBeneficiario){
@@ -1222,6 +1225,8 @@ function toma2(tipoID){
             codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";
             codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR2}}"+"\n";
             codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
+            codigo += "SET !VAR6 EVAL(\"var semGest={{!VAR5}};var aumento= 12;var semGest2=semGest+aumento; semGest2\")"+"\n";
+            codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT={{!VAR6}}"+"\n";
             codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
             codigo += "WAIT SECONDS=0.5"+"\n";
           break;
