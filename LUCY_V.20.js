@@ -1099,8 +1099,10 @@ function capturarCC(pag,users) {
   iimDisplay(users);
   var IdBenef = new Array();
   var TomasBenef = new Array();
+  var tipoIdBenef = new Array();
   var arreglo = new Array("3","11","19","27","35","43","51","59","67","75");
   var arreglo2 = new Array("8","16","24","32","40","48","56","64","72","80");
+  var arreglo3 = new Array("2","10","18","26","34","42","50","58","66","74");
   var nPag = pag;
   var nBene = 0;
   var limite = users;
@@ -1116,6 +1118,7 @@ function capturarCC(pag,users) {
              if (k!=1) {
                 paginador(k);
               };
+            capturarTipoid();
             capturarCedula();
             capturarNtomas();
         for (var j = 0; j <= nBene; j++) {
@@ -1131,7 +1134,7 @@ function capturarCC(pag,users) {
                 break;
               case "1":
                   ingresarItenBENE2(j);
-                  buscarUser(IdBenef[j],TomasBenef[j]);
+                  toma2(tipoIdBenef[j]);
                   if (k!=1) {
                     paginador(k);
                   };
@@ -1142,7 +1145,21 @@ function capturarCC(pag,users) {
         }; 
         limite = limite-10;
     };
-function capturarCedula(){    
+function capturarTipoid(){ 
+//alert("entro");   
+    for (var i = 0; i < nBene ; i++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (i!=10) {
+         iimDisplay(i);
+        codigo += "TAG POS=R"+arreglo3[i]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
+      };
+      iimPlay(codigo);
+      tipoIdBenef[i]=iimGetExtract(i);
+    };
+  }
+  function capturarCedula(){    
     for (var i = 0; i < nBene ; i++) {
       var codigo = "CODE:\n";
       codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
@@ -1169,30 +1186,49 @@ function capturarNtomas(){
     };
   }
 }
-function toma2(){
-  var macro = "CODE:\n";
-  macro += "SET !EXTRACT_TEST_POPUP YES"+"\n";
-  macro += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
-  macro += "TAG POS=R7 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-  //VAR1 GUARDA EL PESO 1
-  macro += "SET !VAR1 {{!EXTRACT}}"+"\n";
-  macro += "SET !EXTRACT NULL"+"\n";
-  macro += "TAG POS=1 TYPE=TD ATTR=TXT:{{!VAR1}}"+ "\n";
-  macro += "TAG POS=R1 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-  //VAR2 GUARDA LA TALLA 1
-  macro += "SET !VAR2 {{!EXTRACT}}"+"\n";
-  macro += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-  macro += "WAIT SECONDS = 1"+"\n";
-  // CALCULO Y GUARDO PESO 2
-  macro += "SET !VAR3 EVAL(\"var peso3={{!VAR1}};var aumento4=Math.floor(Math.random()*1 + 1)+Math.random();var peso4=peso3+aumento4; peso4.toFixed(2);\")"+"\n";
-  macro += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";
-  // CALCULO Y GUARDO TALLA 2
-  macro += "SET !VAR4 EVAL(\"var talla3={{!VAR2}};var aumentot4=Math.floor(Math.random()*2 + 1)+Math.random();var talla4=talla3+aumentot4; talla4.toFixed(2);\")"+"\n";
-  macro += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR4}}"+"\n";
-  macro += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
-  macro += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-  macro += "WAIT SECONDS=0.5"+"\n";
-  iimPlay(macro);
+function toma2(tipoID){
+  var tipoBeneficiario;
+  if (tipoID == "RC") {
+    tipoBeneficiario = 5;
+  }else{
+    tipoBeneficiario = 2;    
+  };
+  var codigo = "CODE:\n";
+      codigo += "SET !EXTRACT_TEST_POPUP YES"+"\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      codigo += "TAG POS=R7 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+      //VAR1 GUARDA EL PESO 1
+      codigo += "SET !VAR1 {{!EXTRACT}}"+"\n";
+      codigo += "SET !EXTRACT NULL"+"\n";
+      codigo += "TAG POS=1 TYPE=TD ATTR=TXT:{{!VAR1}}"+ "\n";
+      codigo += "TAG POS=R1 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+      //VAR2 GUARDA LA TALLA 1
+      codigo += "SET !VAR2 {{!EXTRACT}}"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+      codigo += "WAIT SECONDS = 1"+"\n";
+      switch(tipoBeneficiario){
+        case 5:
+          // CALCULO Y GUARDO PESO 2
+          codigo += "SET !VAR3 EVAL(\"var peso3={{!VAR1}};var aumento4=Math.floor(Math.random()*1 + 1)+Math.random();var peso4=peso3+aumento4; peso4.toFixed(2);\")"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";                      // CALCULO Y GUARDO TALLA 2
+          codigo += "SET !VAR4 EVAL(\"var talla3={{!VAR2}};var aumentot4=Math.floor(Math.random()*2 + 1)+Math.random();var talla4=talla3+aumentot4; talla4.toFixed(2);\")"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR4}}"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
+          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+          codigo += "WAIT SECONDS=0.5"+"\n";
+          break;
+        case 2:
+            codigo += "SET !VAR3 EVAL(\"var peso3={{!VAR1}};var aumento4=Math.floor(Math.random()*1 + 1)+Math.random();var peso4=peso3+aumento4; peso4.toFixed(2);\")"+"\n";
+            codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";
+            codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR2}}"+"\n";
+            codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
+            codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+            codigo += "WAIT SECONDS=0.5"+"\n";
+          break;
+        default:
+          break;
+      };
+  iimPlay(codigo);
   retornar2();
 }
 function buscarUser(id,ctomas){
@@ -1206,73 +1242,30 @@ function buscarUser(id,ctomas){
   var codigo = "CODE:\n";
   for (var j in respuesta) {
     if (respuesta[j].nId == id) {
-        switch(ctomas){
-          case "0":
-            talla = calcularTalla(respuesta[j].fnac,respuesta[j].sexo);
-            peso = generar_peso(respuesta[j].sexo,talla);
-              var codigo = "CODE:\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbCarneSaludVigente_0"+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=04/02/2015"+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
-                   switch(respuesta[j].tipoBene){
-                    case 5:
-                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
-                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
-                      break;
-                    case 2:
-                      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12)+"\n";
-                      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
-                      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
-                      break;
-                    default:
-                      break;
-                    };
-                  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-                  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-                  codigo += "WAIT SECONDS= 1"+"\n";
-            break;
-          case "1":
-                      codigo += "SET !EXTRACT_TEST_POPUP YES"+"\n";
-                      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
-                      codigo += "TAG POS=R7 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-                      //VAR1 GUARDA EL PESO 1
-                      codigo += "SET !VAR1 {{!EXTRACT}}"+"\n";
-                      codigo += "SET !EXTRACT NULL"+"\n";
-                      codigo += "TAG POS=1 TYPE=TD ATTR=TXT:{{!VAR1}}"+ "\n";
-                      codigo += "TAG POS=R1 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-                      //VAR2 GUARDA LA TALLA 1
-                      codigo += "SET !VAR2 {{!EXTRACT}}"+"\n";
-                      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-                      codigo += "WAIT SECONDS = 1"+"\n";
-                      switch(respuesta[j].tipoBene){
-                          case 5:
-                              // CALCULO Y GUARDO PESO 2
-                              codigo += "SET !VAR3 EVAL(\"var peso3={{!VAR1}};var aumento4=Math.floor(Math.random()*1 + 1)+Math.random();var peso4=peso3+aumento4; peso4.toFixed(2);\")"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";
-                              // CALCULO Y GUARDO TALLA 2
-                              codigo += "SET !VAR4 EVAL(\"var talla3={{!VAR2}};var aumentot4=Math.floor(Math.random()*2 + 1)+Math.random();var talla4=talla3+aumentot4; talla4.toFixed(2);\")"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR4}}"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
-                              codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-                              codigo += "WAIT SECONDS=0.5"+"\n";
-                            break;
-                          case 2:
-                              codigo += "SET !VAR3 EVAL(\"var peso3={{!VAR1}};var aumento4=Math.floor(Math.random()*1 + 1)+Math.random();var peso4=peso3+aumento4; peso4.toFixed(2);\")"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT={{!VAR3}}"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT={{!VAR2}}"+"\n";
-                              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=05/05/2015"+"\n";
-                              codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-                              codigo += "WAIT SECONDS=0.5"+"\n";
-                            break;
-                          default:
-                            break;
-                        };           
-            break;
-          default:
-            break;
-        };
+      talla = calcularTalla(respuesta[j].fnac,respuesta[j].sexo);
+      peso = generar_peso(respuesta[j].sexo,talla);
+      var codigo = "CODE:\n";
+          codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbCarneSaludVigente_0"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaValoracionNuricional_txtFecha CONTENT=04/02/2015"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPeso CONTENT="+peso+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTalla CONTENT="+talla+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbPresentaCarneVacunacion_0"+"\n";
+          switch(respuesta[j].tipoBene){
+            case 5:
+              codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneVacunacionAlDia_0"+"\n";
+              codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbCarneCrecimientoDesarrollo_0"+"\n";
+              break;
+            case 2:
+              codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSemanasGestacion CONTENT="+Math.floor(Math.random()*4 + 12)+"\n";
+              codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
+              break;
+            default:
+              break;
+            };
+          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+          codigo += "SET !TIMEOUT_STEP 60"+"\n";
+          codigo += "WAIT SECONDS= 1"+"\n";
         ejecutor = iimPlay(codigo);
           if (ejecutor < 0) {              
               errtext = iimGetLastError();
