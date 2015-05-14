@@ -54,6 +54,7 @@ function Tareas () {
     Tare [6] = "Ingresar Peso && Talla";
     Tare [7] = "Modificar fechas de Nac";
     Tare [8] = "Modificar Etnia";
+    Tare [9] = "Modificar SISBEN Y FAMILIAS EN ACCION";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -62,7 +63,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -91,6 +92,9 @@ Tareas.prototype.mostrarMenu = function() {
           break
         case "8":
             modificarEtnia();
+          break
+          case "9":
+            modificar_FA();
           break
         default:
             break
@@ -140,6 +144,8 @@ function modificarFnac(){
     codigo += "SET !TIMEOUT_STEP 20"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaExpideDocumento_txtFecha CONTENT="+respuesta[i].fechaExpedicion+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaRecepFiscalRegistroCivil_txtFecha CONTENT=04/05/2015"+"\n";
     codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaNacimiento_txtFecha CONTENT="+respuesta[i].FechaNacimiento+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
     ejecutor = iimPlay(codigo);
@@ -181,6 +187,39 @@ function modificarEtnia(){
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
     codigo += "WAIT SECONDS=1"+"\n";
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlGrupoEtnico CONTENT=%8"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    iimPlay(codigo);
+  }
+}
+function modificar_FA (){
+  var datosJson =  HTTPGET('http://localhost/lucy/flia.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RUBONLINE/BENEFICIARIO/List.aspx"+"\n";
+    switch(respuesta[i].TIPO_ID){
+        case "RC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+          break;
+        case "CC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+          break;
+        case "TI":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+          break;
+        default:
+          break;
+    }
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_ID+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlBeneficiarioSisbenizado CONTENT=%S"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%S"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPuntajeSisben CONTENT="+respuesta[i].PUNTAJE+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaRecepFiscalRegistroCivil_txtFecha CONTENT=04/05/2014"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
     codigo += "WAIT SECONDS=1"+"\n";
     iimPlay(codigo);
