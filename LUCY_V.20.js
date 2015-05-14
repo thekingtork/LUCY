@@ -53,6 +53,7 @@ function Tareas () {
     Tare [5] = "Vincular Beneficiarios a UDS";
     Tare [6] = "Ingresar Peso && Talla";
     Tare [7] = "Modificar fechas de Nac";
+    Tare [8] = "Modificar Etnia";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -61,7 +62,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -87,6 +88,9 @@ Tareas.prototype.mostrarMenu = function() {
           break
         case "7":
             modificarFnac();
+          break
+        case "8":
+            modificarEtnia();
           break
         default:
             break
@@ -149,7 +153,39 @@ function modificarFnac(){
   }
 
 }
-
+function modificarEtnia(){
+  var Url = new Ruta();
+  var datosJson =  HTTPGET('http://localhost/lucy/etnia.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
+    codigo += "SET !TIMEOUT_STEP 20"+"\n";
+    switch(respuesta[i].TIPO_ID){
+        case "RC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+          break;
+        case "CC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+          break;
+        case "TI":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+          break;
+        default:
+          break;
+    }
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_ID+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlGrupoEtnico CONTENT=%8"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    iimPlay(codigo);
+  }
+}
 function buscarBeneficiarios () {
   var hoy = new Date().toJSON().slice(0,10);
   var Url = new Ruta();
