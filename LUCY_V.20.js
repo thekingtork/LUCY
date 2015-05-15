@@ -160,6 +160,11 @@ function modificarFnac(){
 
 }
 function modificarEtnia(){
+  var ejecutor;
+  var hoy = new Date().toJSON().slice(0,10);
+  var resultado = "TIPO_ID;NUMERO_ID;ESTADO\r\n";
+   hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_ETNIA_Beneficiarios_"+hoy+".csv",resultado);
+   resultado ="";
   var Url = new Ruta();
   var datosJson =  HTTPGET('http://localhost/lucy/etnia.json');
   var respuesta = JSON.parse(datosJson);
@@ -189,7 +194,14 @@ function modificarEtnia(){
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlGrupoEtnico CONTENT=%8"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
     codigo += "WAIT SECONDS=1"+"\n";
-    iimPlay(codigo);
+    ejecutor = iimPlay(codigo);
+      if (ejecutor < 0) {
+        errtext = iimGetLastError();
+        iimDisplay(errtext);
+        resultado ="";
+        resultado += respuesta[i].TipoDocumento+";"+respuesta[i].Documento+";"+"NO MODIFICADA\r\n";
+        hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_ETNIA_Beneficiarios_"+hoy+".csv",resultado);
+      };
   }
 }
 function modificar_FA (){
