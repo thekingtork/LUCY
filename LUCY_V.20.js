@@ -200,7 +200,7 @@ function IngresarPuntaje(){
     codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
     codigo += "WAIT SECONDS=1"+"\n";
-    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaExpideDocumento_txtFecha CONTENT="+respuesta[i].puntaje+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPuntajeSisben CONTENT="+respuesta[i].puntaje+"\n";
     codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
     codigo += "WAIT SECONDS=1"+"\n";
     iimPlay(codigo);
