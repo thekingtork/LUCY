@@ -55,6 +55,8 @@ function Tareas () {
     Tare [7] = "Modificar fechas de Nac";
     Tare [8] = "Modificar Etnia";
     Tare [9] = "Modificar SISBEN Y FAMILIAS EN ACCION";
+    Tare [10] = "Modificar Discapacidad";
+    Tare [11] = "Puntaje SISBEN";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -63,7 +65,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9)+"\n"+"[10]  "+this.getTare(10)+"\n"+"[11]  "+this.getTare(11),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -93,8 +95,14 @@ Tareas.prototype.mostrarMenu = function() {
         case "8":
             modificarEtnia();
           break
-          case "9":
+        case "9":
             modificar_FA();
+          break
+        case "10":
+          modificarDiscapacidad();
+          break
+        case "11":
+          IngresarPuntaje();
           break
         default:
             break
@@ -159,6 +167,41 @@ function modificarFnac(){
   }
 
 }
+
+function IngresarPuntaje(){
+  var hoy = new Date().toJSON().slice(0,10);
+  var Url = new Ruta();
+  var datosJson =  HTTPGET('http://localhost/lucy/sisben.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
+    codigo += "SET !TIMEOUT_STEP 20"+"\n";
+    switch(respuesta[i].tipoId){
+        case "RC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+          break;
+        case "CC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+          break;
+        case "TI":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+          break;
+        default:
+          break;
+    }
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].numeroId+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaExpideDocumento_txtFecha CONTENT="+respuesta[i].puntaje+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    iimPlay(codigo);
+    }
+  }
+  
 function modificarEtnia(){
   var ejecutor;
   var hoy = new Date().toJSON().slice(0,10);
@@ -201,6 +244,51 @@ function modificarEtnia(){
         resultado ="";
         resultado += respuesta[i].TipoDocumento+";"+respuesta[i].Documento+";"+"NO MODIFICADA\r\n";
         hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_ETNIA_Beneficiarios_"+hoy+".csv",resultado);
+      };
+  }
+}
+function modificarDiscapacidad(){
+  var ejecutor;
+  var hoy = new Date().toJSON().slice(0,10);
+  var resultado = "TIPO_ID;NUMERO_ID;ESTADO\r\n";
+   hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_DISCAP_Beneficiarios_"+hoy+".csv",resultado);
+   resultado ="";
+  var Url = new Ruta();
+  var datosJson =  HTTPGET('http://localhost/lucy/disca.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
+    codigo += "SET !TIMEOUT_STEP 20"+"\n";
+    switch(respuesta[i].TipoDocumento){
+        case "RC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+          break;
+        case "CC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+          break;
+        case "TI":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+          break;
+        default:
+          break;
+    }
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].Documento+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTieneDiscapacidad CONTENT=%N"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    ejecutor = iimPlay(codigo);
+      if (ejecutor < 0) {
+        errtext = iimGetLastError();
+        iimDisplay(errtext);
+        resultado ="";
+        resultado += respuesta[i].TipoDocumento+";"+respuesta[i].Documento+";"+"NO MODIFICADA\r\n";
+        hacerReporte("C:\\xampp\\htdocs\\lucy\\Reporte_DISCAP_Beneficiarios_"+hoy+".csv",resultado);
       };
   }
 }
