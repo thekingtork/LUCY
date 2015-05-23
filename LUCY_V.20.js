@@ -58,6 +58,7 @@ function Tareas () {
     Tare [10] = "Modificar Discapacidad";
     Tare [11] = "Puntaje SISBEN";
     Tare [12] = "Victimas";
+    Tare [13] = "Modificar residencia";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -66,7 +67,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9)+"\n"+"[10]  "+this.getTare(10)+"\n"+"[11]  "+this.getTare(11)+"\n"+"[12]  "+this.getTare(12),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9)+"\n"+"[10]  "+this.getTare(10)+"\n"+"[11]  "+this.getTare(11)+"\n"+"[12]  "+this.getTare(12)+"\n"+"[13]  "+this.getTare(13),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -82,8 +83,8 @@ Tareas.prototype.mostrarMenu = function() {
             buscarBeneficiarios();
           break
         case "4":
-        	guardarBeneficiarios ();
-        	break
+          guardarBeneficiarios ();
+          break
         case "5":
           vincularBeneficiarios();
           break
@@ -107,6 +108,9 @@ Tareas.prototype.mostrarMenu = function() {
           break
         case "12":
           Ingresarvictima();
+          break
+        case "13":
+          modificar_Residencia();
           break
         default:
             break
@@ -388,6 +392,46 @@ function modificar_FA (){
     iimPlay(codigo);
   }
 }
+function modificar_Residencia (){
+  var datosJson =  HTTPGET('http://localhost/lucy/residencia.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i <= respuesta.length; i++) {
+    var codigo = "CODE:\n";
+    codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RUBONLINE/BENEFICIARIO/List.aspx"+"\n";
+    switch(respuesta[i].TIPO_ID){
+        case "RC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+          break;
+        case "CC":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+          break;
+        case "TI":
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+          break;
+        default:
+          break;
+    }
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_ID+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdPaisResidencia CONTENT=%41"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlEstratoHogar CONTENT=%1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlZonaUbicacion CONTENT=%C"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_rbtnDetalleZonaGeo_0"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n"
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_txtDireccion CONTENT="+respuesta[i].DIRECCION_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    iimPlay(codigo);
+  }
+}
 function buscarBeneficiarios () {
   var hoy = new Date().toJSON().slice(0,10);
   var Url = new Ruta();
@@ -430,26 +474,26 @@ function buscarBeneficiarios () {
 }
 
 function mostrarContratos (){
-	var Url = new Ruta();
-	var datosJson = HTTPGET('http://localhost/lucy/contratos.json');
-	var respuesta = JSON.parse(datosJson);
-	var texto = "";
-		for (var i = 0; i < respuesta.length; i++) {
-			 	texto += "["+i+"] "+respuesta[i].NCONTRATO+"  CZ "+respuesta[i].CENTROZONAL+"\n";
-			};
-	var contrato = prompt('Seleccione el contrato a procesar'+"\n"+"\n"+texto,"");
+  var Url = new Ruta();
+  var datosJson = HTTPGET('http://localhost/lucy/contratos.json');
+  var respuesta = JSON.parse(datosJson);
+  var texto = "";
+    for (var i = 0; i < respuesta.length; i++) {
+        texto += "["+i+"] "+respuesta[i].NCONTRATO+"  CZ "+respuesta[i].CENTROZONAL+"\n";
+      };
+  var contrato = prompt('Seleccione el contrato a procesar'+"\n"+"\n"+texto,"");
   var nContrato = respuesta[contrato].NCONTRATO;
-	var codigo = "CODE:\n";
-		codigo += "URL GOTO="+Url.getDireccion(0)+"\n";
-		codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroContrato CONTENT="+respuesta[contrato].NCONTRATO+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdVigencia CONTENT=%7"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdRegional CONTENT=%10"+"\n";
-		codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblDireccionesICBF_0 CONTENT=YES"+"\n";
-		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-		codigo += "WAIT SECONDS=1"+"\n";
-		codigo += "SET !TIMEOUT_STEP 25"+"\n";
-		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvContrato_btnInfo_0"+"\n";
-	iimPlay(codigo);
+  var codigo = "CODE:\n";
+    codigo += "URL GOTO="+Url.getDireccion(0)+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroContrato CONTENT="+respuesta[contrato].NCONTRATO+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdVigencia CONTENT=%7"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdRegional CONTENT=%10"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblDireccionesICBF_0 CONTENT=YES"+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "SET !TIMEOUT_STEP 25"+"\n";
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvContrato_btnInfo_0"+"\n";
+  iimPlay(codigo);
   return nContrato;
 }
 function recorridoVinculacion(servicio){
@@ -459,13 +503,13 @@ function recorridoVinculacion(servicio){
       codigo += "URL GOTO="+Url.getDireccion(1)+"\n";
     };
     codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%3"+"\n";
-		codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioContratado_btnInfo_"+servicio+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+10+"\n";
-		codigo += "WAIT SECONDS=1"+"\n";
-		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+437+"\n";
-		codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-	iimPlay(codigo);	
+    codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvServicioContratado_btnInfo_"+servicio+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlDepartamento CONTENT=%"+10+"\n";
+    codigo += "WAIT SECONDS=1"+"\n";
+    codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlMunicipio CONTENT=%"+437+"\n";
+    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+  iimPlay(codigo);  
 }
 function retornar () {
    var codigo = "CODE:\n";
@@ -592,172 +636,172 @@ function vincularBeneficiarios(){
 }
 
 function guardarBeneficiarios (){
-	var aux = "";
-	var Url = new Ruta();
-	var datosJson =  HTTPGET('http://localhost/lucy/beneficiarios.json');
-  	var respuesta = JSON.parse(datosJson);
-  	for (var i = 0; i <= respuesta.length; i++) {
-	  	var codigo = "CODE:\n";
-	      codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
-	      codigo += "SET !TIMEOUT_STEP 20"+"\n";
-	      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-	      codigo += "SET !TIMEOUT_STEP 20"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%"+respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoExpideDoc CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n"; 
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioExpideDoc CONTENT=%"+respuesta[i].MUNICIPIO_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaExpideDocumento_txtFecha CONTENT="+respuesta[i].FECHA_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-	      if (respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO=="5") {
-	      	codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaRecepFiscalRegistroCivil_txtFecha CONTENT="+respuesta[i].FECHA_DE_VINCULACION_AL_PROGRAMA+"\n"; 
-	      };
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerNombre CONTENT="+respuesta[i].PRIMER_NOMBRE_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoNombre CONTENT="+respuesta[i].SEGUNDO_NOMBRE_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerApellido CONTENT="+respuesta[i].PRIMER_APELLIDO_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoApellido CONTENT="+respuesta[i].SEGUNDO_APELLIDO_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaNacimiento_txtFecha CONTENT="+respuesta[i].FECHA_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdSexo CONTENT=%"+respuesta[i].SEXO_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdPaisNacimiento CONTENT=%41"+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoNacimiento CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioNacimiento CONTENT=%"+respuesta[i].MUNICIPIO_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdPaisResidencia CONTENT=%41"+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlEstratoHogar CONTENT=%1"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlZonaUbicacion CONTENT=%C"+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNombreZonaResto CONTENT="+respuesta[i].NOMBRE_DEL_BARRIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTelefonoResidencia CONTENT="+respuesta[i].NUMERO_TELEFONICO_DEL_BENEFICIARIO+"\n";
-	      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_rbtnDetalleZonaGeo_0"+"\n";
-	      codigo += "WAIT SECONDS=1"+"\n"
-	      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_txtDireccion CONTENT="+respuesta[i].DIRECCION_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-	      if (respuesta[i].EL_BENEFICIARIO_HA_SIDO_SISBENIZADO == "SI") {
-	      	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlBeneficiarioSisbenizado CONTENT=%S"+"\n";	      	
-		      if (respuesta[i].LA_FAMILIA_DEL_BENEFICIARIO_PERTENECE_A_FAMILIAS_EN_ACCION == "SI") {
-		      		codigo += "WAIT SECONDS=0.5"+"\n";
-		      		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%S"+"\n";
-		      } else{
-		      		codigo += "WAIT SECONDS=0.5"+"\n";
-		      		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%X"+"\n";
-		      };
-	      	codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPuntajeSisben CONTENT=10.5"+"\n";
-	      } else{
-	      	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlBeneficiarioSisbenizado CONTENT=%N"+"\n";
-		      	if (respuesta[i].LA_FAMILIA_DEL_BENEFICIARIO_PERTENECE_A_FAMILIAS_EN_ACCION == "SI") {
-		      		codigo += "WAIT SECONDS=0.5"+"\n";
-		      		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%S"+"\n";
-		      } else{
-		      		codigo += "WAIT SECONDS=0.5"+"\n";
-		      		codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%X"+"\n";
-		      };
-	      };
-	      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-	      codigo += "SET !TIMEOUT_STEP 60"+"\n";
-	      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%5"+"\n";
-	      codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
+  var aux = "";
+  var Url = new Ruta();
+  var datosJson =  HTTPGET('http://localhost/lucy/beneficiarios.json');
+    var respuesta = JSON.parse(datosJson);
+    for (var i = 0; i <= respuesta.length; i++) {
+      var codigo = "CODE:\n";
+        codigo += "URL GOTO="+Url.getDireccion(5)+"\n";
+        codigo += "SET !TIMEOUT_STEP 20"+"\n";
+        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+        codigo += "SET !TIMEOUT_STEP 20"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoBeneficiario CONTENT=%"+respuesta[i].TIPO_DE_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%"+respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoExpideDoc CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+        codigo += "WAIT SECONDS=1"+"\n"; 
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioExpideDoc CONTENT=%"+respuesta[i].MUNICIPIO_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaExpideDocumento_txtFecha CONTENT="+respuesta[i].FECHA_DE_EXPEDICION_DEL_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+        if (respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO=="5") {
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaRecepFiscalRegistroCivil_txtFecha CONTENT="+respuesta[i].FECHA_DE_VINCULACION_AL_PROGRAMA+"\n"; 
+        };
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerNombre CONTENT="+respuesta[i].PRIMER_NOMBRE_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoNombre CONTENT="+respuesta[i].SEGUNDO_NOMBRE_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerApellido CONTENT="+respuesta[i].PRIMER_APELLIDO_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoApellido CONTENT="+respuesta[i].SEGUNDO_APELLIDO_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaNacimiento_txtFecha CONTENT="+respuesta[i].FECHA_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdSexo CONTENT=%"+respuesta[i].SEXO_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdPaisNacimiento CONTENT=%41"+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoNacimiento CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioNacimiento CONTENT=%"+respuesta[i].MUNICIPIO_DE_NACIMIENTO_DEL_BENEFICIARIO+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdPaisResidencia CONTENT=%41"+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[i].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlEstratoHogar CONTENT=%1"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlZonaUbicacion CONTENT=%C"+"\n";
+        codigo += "WAIT SECONDS=1"+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNombreZonaResto CONTENT="+respuesta[i].NOMBRE_DEL_BARRIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTelefonoResidencia CONTENT="+respuesta[i].NUMERO_TELEFONICO_DEL_BENEFICIARIO+"\n";
+        codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_rbtnDetalleZonaGeo_0"+"\n";
+        codigo += "WAIT SECONDS=1"+"\n"
+        codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtDireccionResidencia_txtDireccion CONTENT="+respuesta[i].DIRECCION_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
+        if (respuesta[i].EL_BENEFICIARIO_HA_SIDO_SISBENIZADO == "SI") {
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlBeneficiarioSisbenizado CONTENT=%S"+"\n";         
+          if (respuesta[i].LA_FAMILIA_DEL_BENEFICIARIO_PERTENECE_A_FAMILIAS_EN_ACCION == "SI") {
+              codigo += "WAIT SECONDS=0.5"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%S"+"\n";
+          } else{
+              codigo += "WAIT SECONDS=0.5"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%X"+"\n";
+          };
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPuntajeSisben CONTENT=10.5"+"\n";
+        } else{
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlBeneficiarioSisbenizado CONTENT=%N"+"\n";
+            if (respuesta[i].LA_FAMILIA_DEL_BENEFICIARIO_PERTENECE_A_FAMILIAS_EN_ACCION == "SI") {
+              codigo += "WAIT SECONDS=0.5"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%S"+"\n";
+          } else{
+              codigo += "WAIT SECONDS=0.5"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlPerteneceFamiliasAccion CONTENT=%X"+"\n";
+          };
+        };
+        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+        codigo += "SET !TIMEOUT_STEP 60"+"\n";
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%5"+"\n";
+        codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
  ///************************ AGREGA EL ACUDIENTE ************************************************************************//
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoResponsabilidad CONTENT=%1"+"\n";
-		  codigo += "WAIT SECONDS=0.5"+"\n";
-		  aux = respuesta[i].QUIEN_ES_EL_RESPONSABLE_O_ACUDIENTE_DEL_BENEFICIARIO;
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdParentesco CONTENT=%"+verificarParentesco(aux)+"\n";
-		  codigo += "WAIT SECONDS=0.5"+"\n";
-		  if (respuesta[i].TIPO_DE_IDENTIFICACION_DEL_RESPONSABLE_O_ACUDIENTE) {
-		  	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
-		  }else{
-		  	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
-		  };
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIFICACION_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoExpideDoc CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_EXPEDICION_DEL_DOCUMENTO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "WAIT SECONDS=0.5"+"\n";
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioExpideDoc CONTENT=%"+respuesta[i].MUNICIPIO_DE_EXPEDICION_DEL_DOCUMENTO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerNombre CONTENT="+respuesta[i].PRIMER_NOMBRE_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoNombre CONTENT="+respuesta[i].SEGUNDO_NOMBRE_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerApellido CONTENT="+respuesta[i].PRIMER_APELLIDO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoApellido CONTENT="+respuesta[i].SEGUNDO_APELLIDO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoResponsabilidad CONTENT=%1"+"\n";
+      codigo += "WAIT SECONDS=0.5"+"\n";
+      aux = respuesta[i].QUIEN_ES_EL_RESPONSABLE_O_ACUDIENTE_DEL_BENEFICIARIO;
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdParentesco CONTENT=%"+verificarParentesco(aux)+"\n";
+      codigo += "WAIT SECONDS=0.5"+"\n";
+      if (respuesta[i].TIPO_DE_IDENTIFICACION_DEL_RESPONSABLE_O_ACUDIENTE) {
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+      }else{
+        codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+      };
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIFICACION_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoExpideDoc CONTENT=%"+respuesta[i].DEPARTAMENTO_DE_EXPEDICION_DEL_DOCUMENTO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "WAIT SECONDS=0.5"+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioExpideDoc CONTENT=%"+respuesta[i].MUNICIPIO_DE_EXPEDICION_DEL_DOCUMENTO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerNombre CONTENT="+respuesta[i].PRIMER_NOMBRE_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoNombre CONTENT="+respuesta[i].SEGUNDO_NOMBRE_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtPrimerApellido CONTENT="+respuesta[i].PRIMER_APELLIDO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtSegundoApellido CONTENT="+respuesta[i].SEGUNDO_APELLIDO_DEL_RESPONSABLE_O_ACUDIENTE+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
  ///************************ AGREGA EL GRUPO ETNICO ************************************************************************//
- 		  codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/Beneficiario/List.aspx"+"\n";
- 		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
- 		  aux ="";
-			  switch(respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO){
-		        case "RC":
-		          	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
-		          	aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
-		          break;
-		        case "CC":
-		          	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
-		          	aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
-		          break;
-		        case "TI":
-		          	codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
-		          	aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
-		          break;
-		        default:
-		          break;
-	      		}
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-		  codigo += "WAIT SECONDS=0.5"+"\n";
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlGrupoEtnico CONTENT=%8"+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/Beneficiario/List.aspx"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      aux ="";
+        switch(respuesta[i].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO){
+            case "RC":
+                codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+                aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%5"+"\n";
+              break;
+            case "CC":
+                codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+                aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%1"+"\n";
+              break;
+            case "TI":
+                codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+                aux = "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdTipoDocumento CONTENT=%6"+"\n";
+              break;
+            default:
+              break;
+            }
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%1"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+      codigo += "WAIT SECONDS=0.5"+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlGrupoEtnico CONTENT=%8"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
  ///************************ AGREGA CONFLICTO ARMADO ************************************************************************//
-		  codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/Beneficiario/List.aspx"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += aux;  
-		  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
-		  codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%6"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
-		  codigo += "WAIT SECONDS=0.5"+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbVictimaConflicto_1"+"\n";
-		  codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbDesplazamientoForzado_1"+"\n";
-		  codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
-		  codigo += "SET !TIMEOUT_STEP 60"+"\n";
-	  iimPlay(codigo);		
-  	};
+      codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/Beneficiario/List.aspx"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += aux;  
+      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtIdentificacion CONTENT="+respuesta[i].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiario_btnInfo_0"+"\n";
+      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:ddlExtends CONTENT=%6"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/add.gif"+"\n";
+      codigo += "WAIT SECONDS=0.5"+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbVictimaConflicto_1"+"\n";
+      codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbDesplazamientoForzado_1"+"\n";
+      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
+      codigo += "SET !TIMEOUT_STEP 60"+"\n";
+    iimPlay(codigo);    
+    };
 }
 
 function verificarParentesco (dato) {
-	var resultado = "";
-	switch(dato){
-		case "MADRE":
-			resultado = "3";
-			break;
-		case "TIA":
-			resultado = "12";
-			break;
-		case "ABUELA":
-			resultado = "11";
-			break;
-		case "MAMA":
-			resultado = "3";
-			break;
-		case "PADRE":
-			resultado = "2";
-			break;
-		default:
-			break;
-	}
-	return(resultado);
+  var resultado = "";
+  switch(dato){
+    case "MADRE":
+      resultado = "3";
+      break;
+    case "TIA":
+      resultado = "12";
+      break;
+    case "ABUELA":
+      resultado = "11";
+      break;
+    case "MAMA":
+      resultado = "3";
+      break;
+    case "PADRE":
+      resultado = "2";
+      break;
+    default:
+      break;
+  }
+  return(resultado);
 }
 function VincularUDS () {
   var datosJson =  HTTPGET('http://localhost/lucy/unidades.json');
