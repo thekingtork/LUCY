@@ -1,137 +1,207 @@
 [
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066607246,
+    "NUMERO_ID":1066740777,
     "PUNTAJE":35.7
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066606946,
+    "NUMERO_ID":1066606732,
     "PUNTAJE":28.7
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066606344,
+    "NUMERO_ID":1063292661,
     "PUNTAJE":31
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066606406,
+    "NUMERO_ID":1063295594,
     "PUNTAJE":26.7
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063295072,
+    "NUMERO_ID":1066605955,
     "PUNTAJE":30.4
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063297016,
+    "NUMERO_ID":1067920586,
     "PUNTAJE":28.8
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063296019,
+    "NUMERO_ID":1011211462,
     "PUNTAJE":32.2
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063292604,
+    "NUMERO_ID":1063293995,
     "PUNTAJE":35
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1138085613,
+    "NUMERO_ID":1066606448,
     "PUNTAJE":27
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063294641,
+    "NUMERO_ID":1066739872,
     "PUNTAJE":26.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066605983,
+    "NUMERO_ID":1064194255,
     "PUNTAJE":30.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066607030,
+    "NUMERO_ID":1063296993,
     "PUNTAJE":30.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066606724,
+    "NUMERO_ID":1138085153,
     "PUNTAJE":29.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063297182,
+    "NUMERO_ID":1063297483,
     "PUNTAJE":29.4
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063295816,
+    "NUMERO_ID":1063296932,
     "PUNTAJE":29.3
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063299323,
+    "NUMERO_ID":1063296942,
     "PUNTAJE":29.1
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063297184,
+    "NUMERO_ID":1063296935,
     "PUNTAJE":29
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063298940,
+    "NUMERO_ID":1063293043,
     "PUNTAJE":28.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1138086187,
+    "NUMERO_ID":1063295046,
     "PUNTAJE":28.7
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063299979,
+    "NUMERO_ID":1066606753,
     "PUNTAJE":28.6
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063297666,
+    "NUMERO_ID":1066606379,
     "PUNTAJE":28.5
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063298574,
+    "NUMERO_ID":1138082798,
     "PUNTAJE":28.3
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063297633,
+    "NUMERO_ID":1063294584,
     "PUNTAJE":28.2
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063300203,
+    "NUMERO_ID":1066606551,
     "PUNTAJE":28.1
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1063293268,
+    "NUMERO_ID":1066606596,
     "PUNTAJE":27.9
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1066606857,
+    "NUMERO_ID":1063294829,
     "PUNTAJE":27.8
   },
   {
     "TIPO_ID":"RC",
-    "NUMERO_ID":1148695561,
+    "NUMERO_ID":1138086138,
     "PUNTAJE":27.7
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066573284,
+    "PUNTAJE":35.7
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1138085495,
+    "PUNTAJE":28.7
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066573693,
+    "PUNTAJE":31
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1063165357,
+    "PUNTAJE":26.7
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1038119724,
+    "PUNTAJE":30.4
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1138674955,
+    "PUNTAJE":28.8
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1038126149,
+    "PUNTAJE":32.2
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066574125,
+    "PUNTAJE":35
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066574192,
+    "PUNTAJE":27
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066574319,
+    "PUNTAJE":26.9
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066572699,
+    "PUNTAJE":30.9
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1066573510,
+    "PUNTAJE":30.9
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1063299600,
+    "PUNTAJE":29.9
+  },
+  {
+    "TIPO_ID":"RC",
+    "NUMERO_ID":1063300411,
+    "PUNTAJE":29.4
   }
 ]

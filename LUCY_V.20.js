@@ -631,14 +631,14 @@ function vinc (_uds) {
                   codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdDepartamentoResidencia CONTENT=%"+respuesta[j].DEPARTAMENTO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
                   codigo += "WAIT SECONDS=1"+"\n";
                   codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMunicipioResidencia CONTENT=%"+respuesta[j].MUNICIPIO_DE_RESIDENCIA_DEL_BENEFICIARIO+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaVinculacion_txtFecha CONTENT=17/07/2015"+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaVinculacion_txtFecha CONTENT=04/07/2015"+"\n";
                   codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoDocumento CONTENT=%"+respuesta[j].TIPO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtNumeroDocumento CONTENT="+respuesta[j].NUMERO_DE_DOCUMENTO_DE_IDENTIDAD_DEL_BENEFICIARIO+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_btnFiltrar"+"\n";
                   codigo += "WAIT SECONDS=1"+"\n";
                   codigo += "SET !TIMEOUT_STEP 21"+"\n";
                   codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_chkAdd_0 CONTENT=YES"+"\n";
-                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaAtencion_txtFecha CONTENT=17/07/2015"+"\n";
+                  codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaAtencion_txtFecha CONTENT=04/07/2015"+"\n";
                   codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
                  ejecutor = iimPlay(codigo);
                  if (ejecutor < 0) {              
@@ -1001,8 +1001,9 @@ function _desvincularBeneficiarios(){
     _capturarUDSDesvinc(dato);
     iimDisplay(dato);
   };
-}
 function _capturarUDSDesvinc(pag) {
+  var codigoUDSDESV = new Array();
+  var arreglo3 = new Array("2","7","12","17","22","27","32","37","42","47");
   var nPag = pag;
   for (var k = 1; k <= nPag; k++) {
    iimDisplay(nPag);
@@ -1011,47 +1012,69 @@ function _capturarUDSDesvinc(pag) {
                 paginador(k);
               };
         for (var j = 0; j < 10; j++) {
+            capturarUDSDESVICULAR()
             ingresarItenUDS(j);
-            _desvinculador();
+            _desvinculador(codigoUDSDESV[j]);
              if (k!=1) {
                 paginador(k);
               };
         }; 
     };
+
+   function capturarUDSDESVICULAR(){ 
+    for (var m = 0; m < 10 ; m++) {
+      var codigo = "CODE:\n";
+      codigo += "TAG POS=1 TYPE=TH ATTR=TXT:*"+"\n";
+      if (m!=10) {
+         iimDisplay(i);
+        codigo += "TAG POS=R"+arreglo3[m]+" TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+        //codigo += "PROMPT {{!EXTRACT}}"+"\n";
+      };
+      iimPlay(codigo);
+      codigoUDSDESV[m]=iimGetExtract(i);
+      };
+    }
   }
-function _desvinculador () {
-        var codigo = "CODE:\n";
-        codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-        codigo += "WAIT SECONDS=1"+"\n";
-        codigo += "TAG POS=30 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
-        iimPlay(codigo);
-        var estado = iimGetExtract();
-        if (estado=="No se encontraron datos, verifique por favor.") {
+  function _desvinculador (_codigo_UDS) {
+          var datosJson = HTTPGET('http://localhost/lucy/desvincular.json');
+          var respuesta = JSON.parse(datosJson);
+          for (var n = 0; n < respuesta.length; n++) {
+            if (contrato == respuesta[n].CONTRATO && _codigo_UDS == respuesta[n].CODIGO_UDS ) {
+                var codigo = "CODE:\n";
+                    codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtBuscar CONTENT="+respuesta[n].numeroId+"\n";
+                    codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+                    codigo += "WAIT SECONDS=1"+"\n";
+                    codigo += "TAG POS=30 TYPE=TD ATTR=TXT:* EXTRACT=TXT"+"\n";
+                    iimPlay(codigo);
+                var estado = iimGetExtract();
+                if (estado=="No se encontraron datos, verifique por favor.") {
+                      continue;
+                    }else{
+                      codigo = "";
+                      codigo = "CODE:\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_0"+"\n";
+                      codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaDesvinculacion_txtFecha CONTENT="+respuesta[n].fechaDesv+"\n";
+                      codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMotivoRetiroBeneficiario CONTENT=%14"+"\n";
+                      codigo += "ONDIALOG POS=1 BUTTON=OK CONTENT="+"\n";
+                      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/delete.gif"+"\n";
+                      codigo += "WAIT SECONDS=1"+"\n";
+                      codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+                      codigo += "WAIT SECONDS=1"+"\n";
+                      iimPlay(codigo);
+                    };  
+            } else{
+                 iimDisplay("No encontrado en posiscion "+n);
+                continue;
+              };
+            
+          };
           codigo = "";
           codigo = "CODE:\n";
           codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/VincularUDSContrato/List.aspx"+"\n";
           codigo += "WAIT SECONDS=1"+"\n";
           codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
           iimPlay(codigo);
-        } else{
-          codigo = "";
-          codigo = "CODE:\n";
-          codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvBeneficiarios_btnInfo_0"+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_cuwFechaDesvinculacion_txtFecha CONTENT=31/12/2014"+"\n";
-          codigo += "TAG POS=1 TYPE=TD ATTR=TXT:Seleccione<SP>Traslado<SP>de<SP>municipio<SP>Transito<SP>a*"+"\n";
-          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlIdMotivoRetiroBeneficiario CONTENT=%11"+"\n";
-          codigo += "TAG POS=1 TYPE=LABEL FORM=ID:form1 ATTR=TXT:Seleccionar<SP>Todos"+"\n";
-          codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:cphCont_rbTodos"+"\n";
-          codigo += "ONDIALOG POS=1 BUTTON=OK CONTENT="+"\n";
-          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/delete.gif"+"\n";
-          codigo += "WAIT SECONDS=1"+"\n";
-          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-          codigo += "WAIT SECONDS=1"+"\n";
-          codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RubOnline/VincularUDSContrato/List.aspx"+"\n";
-          codigo += "WAIT SECONDS=1"+"\n";
-          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
-          iimPlay(codigo);
-        }; 
+    }
 }
 function paginador (pag){
   iimDisplay("Entro a pagina:  "+pag);
