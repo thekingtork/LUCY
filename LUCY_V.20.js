@@ -61,6 +61,7 @@ function Tareas () {
     Tare [13] = "Modificar residencia";
     Tare [14] = "INGRESAR ACUDIENTE";
     Tare [15] = "INGRESAR DIRECCION";
+    Tare [16] = "DIRECCION UDS";
   this.getTare = function (pos) {
     return Tare[pos];
   }
@@ -69,7 +70,7 @@ function Tareas () {
   }
 }
 Tareas.prototype.mostrarMenu = function() {
-  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9)+"\n"+"[10]  "+this.getTare(10)+"\n"+"[11]  "+this.getTare(11)+"\n"+"[12]  "+this.getTare(12)+"\n"+"[13]  "+this.getTare(13)+"\n"+"[14]  "+this.getTare(14)+"\n"+"[15]  "+this.getTare(15),"");
+  var opcion = prompt("Ingrese la actividad a Desarrollar: "+"\n"+"\n"+"[0] "+this.getTare(0)+"\n"+"[1]  "+this.getTare(1)+"\n"+"[2]  "+this.getTare(2)+"\n"+"[3]  "+this.getTare(3)+"\n"+"[4]  "+this.getTare(4)+"\n"+"[5]  "+this.getTare(5)+"\n"+"[6]  "+this.getTare(6)+"\n"+"[7]  "+this.getTare(7)+"\n"+"[8]  "+this.getTare(8)+"\n"+"[9]  "+this.getTare(9)+"\n"+"[10]  "+this.getTare(10)+"\n"+"[11]  "+this.getTare(11)+"\n"+"[12]  "+this.getTare(12)+"\n"+"[13]  "+this.getTare(13)+"\n"+"[14]  "+this.getTare(14)+"\n"+"[15]  "+this.getTare(15)+"\n"+"[16]  "+this.getTare(16),"");
     switch (opcion) {
         case "0":
             accederCuentame();
@@ -119,6 +120,9 @@ Tareas.prototype.mostrarMenu = function() {
           break
         case "15":
           agregarDireccion();
+          break
+        case "16":
+          adecuarUDS();
           break
         default:
             break
@@ -1012,7 +1016,9 @@ function _capturarUDSDesvinc(pag) {
                 paginador(k);
               };
         for (var j = 0; j < 10; j++) {
-            capturarUDSDESVICULAR()
+          if(j==0){
+            capturarUDSDESVICULAR();            
+          };
             ingresarItenUDS(j);
             _desvinculador(codigoUDSDESV[j]);
              if (k!=1) {
@@ -1092,6 +1098,7 @@ function paginador (pag){
           pagina += "SET !TIMEOUT_STEP 20"+"\n";
           pagina += "TAG POS=1 TYPE=A ATTR=TXT:...\n";
           pagina += "SET !TIMEOUT_STEP 20"+"\n";
+          pagina += "TAG POS=1 TYPE=A ATTR=TXT:"+(pag+1)+"\n";
           pagina += "TAG POS=1 TYPE=A ATTR=TXT:"+pag+"\n";
           if(pag>1){
           pagina += "WAIT SECONDS= 1"+"\n";
@@ -1636,6 +1643,10 @@ function toma2(tipoID){
             codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif"+"\n";
             codigo += "WAIT SECONDS=0.5"+"\n";
           break;
+          case 3:
+              codigo += "TAG POS=1 TYPE=INPUT:RADIO FORM=ID:form1 ATTR=ID:rbAsistioControlesOdontologicos_0"+"\n";
+              codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoComplementoAlimentarioRecibe CONTENT=%1"+"\n";
+              break;
         default:
           break;
       };
@@ -1649,6 +1660,36 @@ function toma2(tipoID){
               retornar2();            
           };  
 }
+
+function adecuarUDS (){
+  var datosJson =  HTTPGET('http://localhost/lucy/datosUDS.json');
+  var respuesta = JSON.parse(datosJson);
+  for (var i = 0; i < respuesta.length; i++) {
+      var codigo = "CODE:\n";
+          codigo += "URL GOTO=https://rubonline.icbf.gov.co/Page/RUBONLINE/UNIDADSERVICIO/List.aspx"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtCodigoUnidadServicio CONTENT="+respuesta[i].CODIGO_UDS+"\n";
+          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/list.png"+"\n";
+          codigo += "WAIT SECONDS= 1"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:IMAGE FORM=ID:form1 ATTR=ID:cphCont_gvUnidadServicio_btnInfo_0"+"\n";
+          codigo += "WAIT SECONDS= 1"+"\n";
+          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/edit.gif"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtDireccion_txtDireccion CONTENT="+respuesta[i].DIRECCION_UDS+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:TEXT FORM=ID:form1 ATTR=ID:cphCont_txtTelefono CONTENT="+respuesta[i].TELEFONO_UDS+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblstServiciosPublicos_3 CONTENT=YES"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblstServiciosPublicos_2 CONTENT=YES"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblstServiciosPublicos_4 CONTENT=YES"+"\n";
+          codigo += "TAG POS=1 TYPE=INPUT:CHECKBOX FORM=ID:form1 ATTR=ID:cphCont_cblstServiciosPublicos_5 CONTENT=NO"+"\n";
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddltipoUDS CONTENT=%"+respuesta[i].TIPO_UDS+"\n";
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlTipoViviendaOcupadaPorFamilia CONTENT=%P"+"\n";
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlEstratoLugarVivienda CONTENT=%1"+"\n";
+          codigo += "TAG POS=1 TYPE=SELECT FORM=ID:form1 ATTR=ID:cphCont_ddlHogarFuncVivienda CONTENT=%S"+"\n";
+          codigo += "TAG POS=1 TYPE=IMG ATTR=SRC:https://rubonline.icbf.gov.co/Image/btn/save.gif  "+"\n";
+          codigo += "WAIT SECONDS= 1"+"\n";
+          iimPlay(codigo);
+  };
+}
+
+
 function buscarUser(id,ctomas){
   iimDisplay(ctomas);
   var ejecutor;
